@@ -11,14 +11,23 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+/* COMENTARIOS
+ * - Clase principal que maneja la llegada de mensajes de parte de
+ *   los clientes. Se encarga de la comunicación en general entre
+ *   cliente-servidor.
+ */
+
 public class WebsocketGameHandler extends TextWebSocketHandler {
 
+	// VARIABLES AND FIXED VALUES
 	private SpacewarGame game = SpacewarGame.INSTANCE;
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
 
+	// METHODS
+	/* When someone connects to the server, this method is executed */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		Player player = new Player(playerId.incrementAndGet(), session);
@@ -33,6 +42,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		game.addPlayer(player);
 	}
 
+	/* When a message comes, this method is executed */
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		try {
@@ -72,6 +82,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		}
 	}
 
+	/* When someone leaves the game, this method is executed */
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);

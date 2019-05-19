@@ -1,10 +1,19 @@
 package spacewar;
 
+/* COMENTARIOS
+ * - Clase genérica para cualquier objeto dentro del juego. Todos los objetos
+ *   visibles o no dentro del juego que interactúen de alguna manera con él, 
+ *   debe tener una posición, probablemente velocidad o ángulo en el que mira.
+ *   Son una serie de valores que todos los objetos tienen o pueden tener.
+ */
+
 public class SpaceObject {
 
+	// VARIABLES AND FIXED VALUES
 	private int collisionFactor;
 	private double posX, posY, velX, velY, facingAngle;
 
+	// METHODS
 	public double getPosX() {
 		return this.posX;
 	}

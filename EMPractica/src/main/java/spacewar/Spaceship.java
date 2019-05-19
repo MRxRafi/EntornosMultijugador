@@ -1,14 +1,19 @@
 package spacewar;
 
+/* COMENTARIOS
+ * - Clase de la nave principal que maneja el usuario.
+ */
+
 public class Spaceship extends SpaceObject {
 
+	// VARIABLES AND FIXED VALUES
 	private static final double SPACESHIP_SPEED = 0.6;
 	private static final double SPACESHIP_BRAKES = 0.90;
 	private static final double SPACESHIP_ROTATION_SPEED = 3.00;
 	private static final int SPACESHIP_COLLISION_FACTOR = 400;
 	private static final double SPACE_FRICTION = 0.95;
 
-	class LastMovement {
+	class LastMovement { // Enum of booleans for movement
 		boolean thrust = false;
 		boolean brake = false;
 		boolean rotLeft = false;
@@ -17,12 +22,14 @@ public class Spaceship extends SpaceObject {
 
 	private LastMovement lastMovement;
 
+	// BUILDER
 	public Spaceship() {
 		this.setCollisionFactor(SPACESHIP_COLLISION_FACTOR);
 		// Randomize
 		this.initSpaceship(Math.random() * 1000, Math.random() * 600, Math.random() * 360);
 	}
 
+	// METHODS
 	public void initSpaceship(double coordX, double coordY, double facingAngle) {
 		this.setPosition(coordX, coordY);
 		this.setVelocity(0, 0);

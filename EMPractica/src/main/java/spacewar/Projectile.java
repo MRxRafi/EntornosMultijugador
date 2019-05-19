@@ -1,7 +1,12 @@
 package spacewar;
 
-public class Projectile extends SpaceObject {
+/* COMENTARIOS
+ * - Clase principal de un proyectil
+ */
 
+public class Projectile extends SpaceObject {
+	
+	// VARIABLES AND FIXED VALUES
 	private static final int LIFESPAN = 2000;
 	private static final double PROJECTILE_SPEED = 25;
 	private static final int PROJECTILE_COLLISION_FACTOR = 200;
@@ -12,6 +17,7 @@ public class Projectile extends SpaceObject {
 
 	private boolean isHit = false;
 
+	// BUILDER
 	public Projectile(Player owner, int id) {
 		this.setCollisionFactor(PROJECTILE_COLLISION_FACTOR);
 		this.owner = owner;
@@ -20,6 +26,7 @@ public class Projectile extends SpaceObject {
 		this.id = id % 800; // 800 = maxNumProjectiles
 	}
 
+	//METHODS
 	public Player getOwner() {
 		return this.owner;
 	}

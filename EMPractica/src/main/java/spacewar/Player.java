@@ -5,18 +5,25 @@ import java.util.Random;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
-public class Player extends Spaceship {
+/* COMENTARIOS
+ * - Clase de un jugador
+ */
 
+public class Player extends Spaceship {
+	
+	// VARIABLES AND FIXED VALUES
 	private final WebSocketSession session;
 	private final int playerId;
 	private final String shipType;
-
+	
+	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
 		this.playerId = playerId;
 		this.session = session;
 		this.shipType = this.getRandomShipType();
 	}
 
+	// METHODS
 	public int getPlayerId() {
 		return this.playerId;
 	}

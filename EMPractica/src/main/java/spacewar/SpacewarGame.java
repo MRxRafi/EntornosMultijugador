@@ -16,27 +16,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class SpacewarGame {
+/* COMENTARIOS
+ * - Instancia principal del juego. Contiene variables de configuración y
+ *   todas las variables (jugadores, proyectiles, salas, etc) del juego.
+ *   También contiene los métodos para añadir, borrar y actualizar las
+ *   variables del juego de sus estructuras de datos.
+ */
 
+public class SpacewarGame {
+	// FIXED VALUES
 	public final static SpacewarGame INSTANCE = new SpacewarGame();
 
 	private final static int FPS = 30;
 	private final static long TICK_DELAY = 1000 / FPS;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
-
+	
+	// VARIABLES
 	ObjectMapper mapper = new ObjectMapper();
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-	// GLOBAL GAME ROOM
+	// GLOBAL GAME ROOM 
 	private Map<String, Player> players = new ConcurrentHashMap<>();
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private AtomicInteger numPlayers = new AtomicInteger();
-
+	
+	// BUILDER
 	private SpacewarGame() {
 
 	}
 
+	// METHODS
+	/* Adds a player into the players structure */
 	public void addPlayer(Player player) {
 		players.put(player.getSession().getId(), player);
 
@@ -45,11 +56,13 @@ public class SpacewarGame {
 			this.startGameLoop();
 		}
 	}
-
+	
+	/* Returns a collection containing all the values from the players structure */
 	public Collection<Player> getPlayers() {
 		return players.values();
 	}
 
+	/* Remove a player from the players structure */
 	public void removePlayer(Player player) {
 		players.remove(player.getSession().getId());
 
@@ -59,29 +72,36 @@ public class SpacewarGame {
 		}
 	}
 
+	/* Adds a projectile into the projectiles structure, indicating the ID of the
+	 * player that shooted that projectile as the key */
 	public void addProjectile(int id, Projectile projectile) {
 		projectiles.put(id, projectile);
 	}
-
+	
+	/* Returns a collection containing all the projectiles */
 	public Collection<Projectile> getProjectiles() {
 		return projectiles.values();
 	}
 
+	/* Removes a projectile from the projectiles structure */
 	public void removeProjectile(Projectile projectile) {
 		players.remove(projectile.getId(), projectile);
 	}
 
+	/* Starts the Scheduled Executor, running the tick() method every TICK_DELAY milliseconds*/
 	public void startGameLoop() {
 		scheduler = Executors.newScheduledThreadPool(1);
 		scheduler.scheduleAtFixedRate(() -> tick(), TICK_DELAY, TICK_DELAY, TimeUnit.MILLISECONDS);
 	}
 
+	/* Stops the game safetly */
 	public void stopGameLoop() {
 		if (scheduler != null) {
 			scheduler.shutdown();
 		}
 	}
 
+	/* Broadcasts a message to every player in the global room */
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
 			try {
@@ -94,6 +114,7 @@ public class SpacewarGame {
 		}
 	}
 
+	/* A method that updates the game state */
 	private void tick() {
 		ObjectNode json = mapper.createObjectNode();
 		ArrayNode arrayNodePlayers = mapper.createArrayNode();
@@ -164,6 +185,7 @@ public class SpacewarGame {
 		}
 	}
 
+	/* I don't know why this method is here */
 	public void handleCollision() {
 
 	}

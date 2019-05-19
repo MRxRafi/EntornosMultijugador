@@ -7,6 +7,10 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
+/* COMENTARIOS
+ * - Clase que inicia el servidor websockets
+ */
+
 @SpringBootApplication
 @EnableWebSocket
 public class Application implements WebSocketConfigurer {
