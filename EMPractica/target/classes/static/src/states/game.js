@@ -40,6 +40,11 @@ Spacewar.gameState.prototype = {
 		game.global.myPlayer.image = game.add.sprite(0, 0, 'spacewar',
 				game.global.myPlayer.shipType)
 		game.global.myPlayer.image.anchor.setTo(0.5, 0.5)
+		
+		
+		game.global.myInterface.myPlayerName = game.add.text(game.global.myPlayer.image.x,
+				game.global.myPlayer.image.y + game.global.myPlayer.image.height + 5,
+				game.global.myPlayer.name, {font: "20px Times New Roman", fill: "#FFFFFF", align: "left"});
 	},
 
 	create : function() {

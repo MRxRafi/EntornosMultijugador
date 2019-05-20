@@ -15,6 +15,7 @@ public class Player extends Spaceship {
 	private final WebSocketSession session;
 	private final int playerId;
 	private final String shipType;
+	private String name;
 	
 	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
@@ -40,6 +41,14 @@ public class Player extends Spaceship {
 		return shipType;
 	}
 
+	public String getName() {
+		return this.name;
+	}
+	
+	public void setName(String n) {
+		this.name = n;
+	}
+	
 	private String getRandomShipType() {
 		String[] randomShips = { "blue", "darkgrey", "green", "metalic", "orange", "purple", "red" };
 		String ship = (randomShips[new Random().nextInt(randomShips.length)]);

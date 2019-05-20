@@ -24,7 +24,7 @@ Spacewar.menuState.prototype = {
 	},
 
 	create : function() {
-
+		
 	},
 
 	update : function() {

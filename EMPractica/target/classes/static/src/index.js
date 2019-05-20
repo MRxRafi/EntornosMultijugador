@@ -5,13 +5,16 @@ window.onload = function() {
 	// GLOBAL VARIABLES
 	game.global = {
 		FPS : 30,
-		DEBUG_MODE : false,
+		DEBUG_MODE : true,
 		socket : null,
 		myPlayer : new Object(),
+		myInterface : new Object(),
 		otherPlayers : [],
 		projectiles : []
 	}
 
+	game.global.myInterface.otherPlayers = []
+	
 	// WEBSOCKET CONFIGURATOR
 	game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
 	
@@ -64,16 +67,34 @@ window.onload = function() {
 						game.global.myPlayer.image.x = player.posX
 						game.global.myPlayer.image.y = player.posY
 						game.global.myPlayer.image.angle = player.facingAngle
+						
+						game.global.myInterface.myPlayerName.x = player.posX - game.global.myInterface.myPlayerName.width/2;
+						game.global.myInterface.myPlayerName.y = player.posY + game.global.myPlayer.image.height + 5;
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
 							game.global.otherPlayers[player.id] = {
 									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
 							}
 							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
+							
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
+
+							if(player.name !== null){
+								if(typeof game.global.myInterface.otherPlayers[player.id] === 'undefined'){
+									game.global.myInterface.otherPlayers[player.id] = {
+										name : game.add.text(player.posX,
+												player.posY + game.global.otherPlayers[player.id].image.height + 5,
+												player.name, {font: "20px Times New Roman", fill: "#FFFFFF", align: "left"})
+									}
+								}
+								game.global.myInterface.otherPlayers[player.id].name.x = 
+									player.posX - game.global.myInterface.otherPlayers[player.id].name.width/2
+								game.global.myInterface.otherPlayers[player.id].name.y = player.posY + game.global.otherPlayers[player.id].image.height + 5
+							}
+							
 						}
 					}
 				}
@@ -106,6 +127,7 @@ window.onload = function() {
 				console.dir(msg.players)
 			}
 			game.global.otherPlayers[msg.id].image.destroy()
+			game.global.myInterface.otherPlayers[msg.id].name.destroy()
 			delete game.global.otherPlayers[msg.id]
 		default :
 			console.dir(msg)
