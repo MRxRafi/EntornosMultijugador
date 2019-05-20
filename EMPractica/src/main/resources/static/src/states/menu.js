@@ -24,12 +24,70 @@ Spacewar.menuState.prototype = {
 	},
 
 	create : function() {
-		
+		// Estilos de texto
+		var titleStyle = {
+			fill : "rgb(255,255,255)",
+			font : "100px Faster One",
+			boundsAlignH : "center"
+		};
+		var style = {
+			fill : "rgb(255,255,255)",
+			font : "60px Chakra Petch",
+			boundsAlignH : "center"
+		};
+		// Crea el texto del Título
+        var titleText = game.add.text(0,0,"SPACE WAR",titleStyle);
+        titleText.setTextBounds(0,0,game.world.width,game.world.height);
+        
+        // Crea el texto de las opciones del menú
+        menuOptions=["Jugar", "Opciones"];
+        var y=game.canvas.height/3;
+        var yOffset= 80;
+        var menuText=[];
+        for(var i= 0; i<menuOptions.length; i++)
+            {
+                menuText[i] = game.add.text(0, y, menuOptions[i], style);
+                menuText[i].setTextBounds(0,0,game.world.width,game.world.height);
+                // Añade detección de eventos en cada texto
+                menuText[i].inputEnabled = true;
+                menuText[i].events.onInputOver.add(this.over,this);
+                menuText[i].events.onInputOut.add(this.out,this);
+                // Indica a qué función llamar dependiendo de qué texto se trate
+                switch(i){
+                    case 0:
+                        menuText[i].events.onInputDown.add(this.play,this);
+                        break;
+                    case 1:
+                        // menuText[i].events.onInputDown.add(this.options,this);
+                        break;
+                }
+
+                y+= yOffset;
+            }
 	},
 
-	update : function() {
+	play : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			game.state.start('lobbyState')
 		}
+	},
+	
+	options : function() {
+		
+	},
+	
+	//Recibe como parámetro un texto  
+	//Modifica su color al pasar el ratón por encima, reproduciendo un sonido
+	over : function(text) {
+
+	    text.fill = "rgb(255,0,255)";
+	},
+	
+	//Recibe como parámetro un texto  
+	//Modifica su color al apartar el ratón
+	out : function(text) {
+	    text.fill = "rgb(255,255,255)";
 	}
+	
+
 }
