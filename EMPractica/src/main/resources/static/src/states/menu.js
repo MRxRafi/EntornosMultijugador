@@ -35,6 +35,14 @@ Spacewar.menuState.prototype = {
 			font : "60px Chakra Petch",
 			boundsAlignH : "center"
 		};
+		let name = window.prompt("Introduzca su nombre de usuario: ");
+		game.global.myPlayer.name = name;
+		
+		let message = {
+			event : 'PLAYER NAME',
+			playerName : game.global.myPlayer.name
+		}
+		game.global.socket.send(JSON.stringify(message))
 		// Crea el texto del Título
         var titleText = game.add.text(0,0,"SPACE WAR",titleStyle);
         titleText.setTextBounds(0,0,game.world.width,game.world.height);
@@ -68,7 +76,8 @@ Spacewar.menuState.prototype = {
 
 	play : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			game.state.start('lobbyState')
+			//game.state.start('lobbyState')
+			game.state.start('matchmakingState')
 		}
 	},
 	

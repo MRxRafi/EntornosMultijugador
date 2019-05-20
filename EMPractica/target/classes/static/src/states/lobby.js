@@ -49,7 +49,7 @@ Spacewar.lobbyState.prototype = {
 	},
 
 	update : function() {
-
+		
 	},
 
 	//Recibe como parámetro un texto  

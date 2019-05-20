@@ -15,12 +15,8 @@ Spacewar.matchmakingState.prototype = {
 			console.log("[DEBUG] Joining room...");
 		}
 		
-		let name = window.prompt("Introduzca su nombre de usuario: ");
-		game.global.myPlayer.name = name;
-		
 		let message = {
 			event : 'JOIN ROOM',
-			playerName : game.global.myPlayer.name
 		}
 		game.global.socket.send(JSON.stringify(message))
 	},
