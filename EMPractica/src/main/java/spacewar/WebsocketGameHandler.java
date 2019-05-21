@@ -29,7 +29,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	// METHODS
 	/* When someone connects to the server, this method is executed */
 	@Override
-	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //¿A que sala hay que añadirlo?
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
 		
@@ -39,7 +39,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("shipType", player.getShipType());
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
 		
-		game.addPlayer(player);
+		game.lobby.addJugador(player);
 	}
 
 	/* When a message comes, this method is executed */
@@ -60,19 +60,28 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("shipType", player.getShipType());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+				
+			//Crear caso create room
+			case "CREATE ROOM":
+				
+				break;
 			case "JOIN ROOM":
+				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");
-				msg.put("room", "GLOBAL");
+				player.setActualRoom(node.path("room").asText());
+				msg.put("room", player.getActualRoom());
+
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "UPDATE MOVEMENT":
+				// Actualizar según la sala
 				player.loadMovement(node.path("movement").get("thrust").asBoolean(),
 						node.path("movement").get("brake").asBoolean(),
 						node.path("movement").get("rotLeft").asBoolean(),
 						node.path("movement").get("rotRight").asBoolean());
 				if (node.path("bullet").asBoolean()) {
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
-					game.addProjectile(projectile.getId(), projectile);
+					game.battleRooms.get(player.getActualRoom()).addProjectile(projectile.getId(), projectile);
 				}
 				break;
 			default:
@@ -89,11 +98,22 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
-		game.removePlayer(player);
-
+		String sala_actual = player.getActualRoom();
+		
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "REMOVE PLAYER");
 		msg.put("id", player.getPlayerId());
-		game.broadcast(msg.toString());
+		
+		if(sala_actual == "lobby") {
+			game.lobby.deleteJugador(player);
+			game.lobby.broadcast(msg.toString());
+		} else if(game.battleRooms.containsKey(sala_actual)) {
+			game.battleRooms.get(sala_actual).deleteJugador(player);
+			game.battleRooms.get(sala_actual).broadcast(msg.toString());
+		} else if(game.waitRooms.containsKey(sala_actual)) {
+			game.waitRooms.get(sala_actual).deleteJugador(player);
+			game.waitRooms.get(sala_actual).broadcast(msg.toString());
+		}
+		
 	}
 }

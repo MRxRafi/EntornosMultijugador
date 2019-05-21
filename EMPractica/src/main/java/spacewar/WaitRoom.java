@@ -15,7 +15,7 @@ public class WaitRoom extends GenericRoom {
 	}
 	
 	public void setIdHost() {
-		if(getJugadores().size()>0)
-			this.IdHost=getJugadores().get(0).getPlayerId();
+		if(getPlayers().size()>0)
+			this.IdHost=getPlayers().get(0).getPlayerId();
 	}
 }
