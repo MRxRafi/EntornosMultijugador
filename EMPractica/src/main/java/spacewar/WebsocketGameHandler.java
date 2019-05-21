@@ -68,10 +68,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				
 				//Crear caso create room
 			case "CREATE ROOM":
+				System.out.println(node.get("sala").asText());
+				System.out.println(game.waitRooms.containsKey(node.get("sala").asText()));
 				
-				boolean aux=game.waitRooms.containsKey(msg.path("sala").asText());
+				boolean aux=game.waitRooms.containsKey(node.path("sala").asText());
 				if(!aux) {
-					game.waitRooms.put(msg.path("sala").asText(), new WaitRoom(msg.path("sala").asText(),player));
+					game.waitRooms.put(node.path("sala").asText(), new WaitRoom(node.path("sala").asText(),player));
 					aux = true;
 				} else {
 					aux = false;
