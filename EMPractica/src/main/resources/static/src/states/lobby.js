@@ -31,15 +31,15 @@ Spacewar.lobbyState.prototype = {
                lobbyText[i].setTextBounds(0,0,game.world.width,game.world.height);
                // Añade detección de eventos en cada texto
                lobbyText[i].inputEnabled = true;
-               lobbyText[i].events.onInputOver.add(this.over,this);
-               lobbyText[i].events.onInputOut.add(this.out,this);
+               lobbyText[i].events.onInputOver.add(mouseOver,this);
+               lobbyText[i].events.onInputOut.add(mouseOut,this);
                 // Indica a qué función llamar dependiendo de qué texto se trate
                 switch(i){
                     case 0:
-                        //menuText[i].events.onInputDown.add(this.play,this);
+                        //menuText[i].events.onInputDown.add(this.crearPartida,this);
                         break;
                     case 1:
-                        // menuText[i].events.onInputDown.add(this.options,this);
+                        // menuText[i].events.onInputDown.add(this.buscarPartida,this);
                         break;
                 }
 
@@ -51,17 +51,4 @@ Spacewar.lobbyState.prototype = {
 	update : function() {
 		
 	},
-
-	//Recibe como parámetro un texto  
-	//Modifica su color al pasar el ratón por encima, reproduciendo un sonido
-	over : function(text) {
-
-	    text.fill = "rgb(255,0,255)";
-	},
-	
-	//Recibe como parámetro un texto  
-	//Modifica su color al apartar el ratón
-	out : function(text) {
-	    text.fill = "rgb(255,255,255)";
-	}
 }
