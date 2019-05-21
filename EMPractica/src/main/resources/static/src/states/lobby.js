@@ -50,7 +50,17 @@ Spacewar.lobbyState.prototype = {
 
 	crear : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			game.state.start('selectRoomState')
+			var valido=false;
+			while(!valido){
+				let name = window.prompt("Introduzca su nombre de sala: ");
+				let message = {
+					event : 'CREATE ROOM',
+					sala: name
+				}
+				game.global.socket.send(JSON.stringify(message))
+				valido=game.global.validRoom;
+			}
+			game.state.start('roomState')
 		}
 	},
 

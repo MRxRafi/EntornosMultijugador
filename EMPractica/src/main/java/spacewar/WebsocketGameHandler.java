@@ -52,7 +52,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 			switch (node.get("event").asText()) {
 			case "PARTIDAS":
-				msg.put("event", "MAPA");
+				msg.put("event", "PARTIDAS");
 				msg.put("waitRoomMap", (JsonNode) game.waitRooms);
 			case "PLAYER NAME":
 				player.setName(node.get("playerName").asText());
@@ -67,7 +67,15 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			//Crear caso create room
 			case "CREATE ROOM":
 				
+				boolean aux=game.waitRooms.containsKey(msg.path("sala").asText());
+				if(!aux) {
+					game.waitRooms.put(msg.path("sala").asText(), new WaitRoom(msg.path("sala").asText(),player));
+				}
+				msg.put("event","CREATE ROOM");
+				msg.put("valido", aux);
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+				
 			case "JOIN ROOM":
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");
