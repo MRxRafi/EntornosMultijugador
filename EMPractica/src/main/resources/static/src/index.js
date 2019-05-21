@@ -61,6 +61,7 @@ window.onload = function() {
 				console.log('[DEBUG] CREATE ROOM message recieved')
 				console.dir(msg)
 			}
+<<<<<<< HEAD
 			game.global.validRoom=msg.valido;
 			if(!msg.valido){
 				// Funcion pregunta de nuevo el nombre
@@ -71,6 +72,13 @@ window.onload = function() {
 				game.state.start('roomState')
 			}
 			
+=======
+
+			game.global.validRoom=msg.valido;
+			if(game.global.validRoom){
+				game.global.myPlayer.room=msg.sala;
+			}
+>>>>>>> a65316bee685a668b4f7fd6db5495d656ff98a90
 			break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {
