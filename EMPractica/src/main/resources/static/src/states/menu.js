@@ -27,7 +27,7 @@ Spacewar.menuState.prototype = {
 		// Estilos de texto
 		var titleStyle = {
 			fill : "rgb(255,255,255)",
-			font : "100px Faster One",
+			font : "100px Chakra Petch",
 			boundsAlignH : "center"
 		};
 		var style = {
@@ -35,6 +35,7 @@ Spacewar.menuState.prototype = {
 			font : "60px Chakra Petch",
 			boundsAlignH : "center"
 		};
+		// Se pide un nombre de usuario y se envía al servidor
 		let name = window.prompt("Introduzca su nombre de usuario: ");
 		game.global.myPlayer.name = name;
 		
@@ -58,8 +59,8 @@ Spacewar.menuState.prototype = {
                 menuText[i].setTextBounds(0,0,game.world.width,game.world.height);
                 // Añade detección de eventos en cada texto
                 menuText[i].inputEnabled = true;
-                menuText[i].events.onInputOver.add(this.over,this);
-                menuText[i].events.onInputOut.add(this.out,this);
+                menuText[i].events.onInputOver.add(mouseOver,this);
+                menuText[i].events.onInputOut.add(mouseOut,this);
                 // Indica a qué función llamar dependiendo de qué texto se trate
                 switch(i){
                     case 0:
@@ -84,19 +85,4 @@ Spacewar.menuState.prototype = {
 	options : function() {
 		
 	},
-	
-	//Recibe como parámetro un texto  
-	//Modifica su color al pasar el ratón por encima, reproduciendo un sonido
-	over : function(text) {
-
-	    text.fill = "rgb(255,0,255)";
-	},
-	
-	//Recibe como parámetro un texto  
-	//Modifica su color al apartar el ratón
-	out : function(text) {
-	    text.fill = "rgb(255,255,255)";
-	}
-	
-
 }
