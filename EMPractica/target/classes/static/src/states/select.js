@@ -19,10 +19,7 @@ Spacewar.selectRoomState.prototype = {
             event : 'PARTIDAS'
         }
         game.global.socket.send(JSON.stringify(message))
-
-        console.log("----------------------------------------")
-        console.log(message)
-
+		console.log(game.global.gameList)
 	},
 
 	update : function() {

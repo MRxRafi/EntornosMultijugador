@@ -22,4 +22,9 @@ public class WaitRoom extends GenericRoom {
 		//if(getPlayers().size()>0)
 		//	this.IdHost=getPlayers().get(0).getPlayerId();
 	}
+	
+	public String toString() {
+		
+		return super.toString() + ",\"idHost\":\"" + getIdHost() + "\"";  		
+	}
 }

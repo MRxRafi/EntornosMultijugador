@@ -43,7 +43,11 @@ window.onload = function() {
 				console.log('[DEBUG] PARTIDAS message recieved')
 				console.dir(msg)
 			}
-			game.global.gameList=msg.waitRoomMap
+			var lista=JSON.parse(msg.partidas)
+			console.log("EEEE")
+			console.log(lista)
+			console.log(lista[0])
+			
 			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {

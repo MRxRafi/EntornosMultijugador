@@ -41,7 +41,6 @@ public class SpacewarGame {
 	
 	// BUILDER
 	private SpacewarGame() {
-		waitRooms.put("room", new WaitRoom("room"));
 		battleRooms.put("game", new BattleRoom("game", scheduler));
 		battleRooms.get("game").startGameLoop();
 	}
