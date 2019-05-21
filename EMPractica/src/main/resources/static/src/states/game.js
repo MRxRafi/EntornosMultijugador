@@ -99,7 +99,7 @@ Spacewar.gameState.prototype = {
 		}
 
 		if (game.global.DEBUG_MODE) {
-			console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
+			//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
 		}
 		game.global.socket.send(JSON.stringify(msg))
 	}
