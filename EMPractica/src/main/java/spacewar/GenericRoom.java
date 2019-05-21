@@ -1,36 +1,57 @@
 package spacewar;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.springframework.web.socket.TextMessage;
+
 public class GenericRoom {
-    private List<Player> Jugadores = new ArrayList<Player>();
-    private String nombre;
-    private AtomicInteger numPlayers = new AtomicInteger();
+	protected Map<String, Player> Jugadores = new ConcurrentHashMap<String, Player>();	
+	protected AtomicInteger numPlayers = new AtomicInteger(0);
+	protected String nombre;
+	
+	public GenericRoom(String nombre, Player player) {
+		Jugadores.put(player.getSession().getId(), player);
+		numPlayers.incrementAndGet();
+		this.nombre=nombre;
+	}
+	
+	/* Returns a collection containing all the values from the players structure */
+	public List<Player> getPlayers() {
+		return (List<Player>) Jugadores.values();
+	}
 
-    public GenericRoom(String nombre, Player player) {
-        this.Jugadores.add(player);
-        this.nombre=nombre;
-    }
+	public void addJugador(Player p) {
+		Jugadores.put(p.getSession().getId(), p);
+		numPlayers.incrementAndGet();
+	}
+	
+	public void deleteJugador(Player p) {
+		Jugadores.remove(p.getSession().getId());
+		numPlayers.decrementAndGet();
+	}
 
-    public List<Player> getJugadores() {
-        return Jugadores;
-    }
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
 
-    public void addJugador(Player p) {
-        this.Jugadores.add(p);
-    }
-
-    public void deleteJugador(int index) {
-        this.Jugadores.remove(index);
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getNombre() {
-        return this.nombre;
-    }
+	public String getNombre() {
+		return this.nombre;
+	}
+	
+	/* Broadcasts a message to every player in the global room */
+	public void broadcast(String message) {
+		for (Player player : getPlayers()) {
+			try {
+				player.getSession().sendMessage(new TextMessage(message.toString()));
+			} catch (Throwable ex) {
+				System.err.println("Execption sending message to player " + player.getSession().getId());
+				ex.printStackTrace(System.err);
+				this.deleteJugador(player);
+			}
+		}
+	}
 }

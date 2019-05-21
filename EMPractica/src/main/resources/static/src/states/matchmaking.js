@@ -15,6 +15,7 @@ Spacewar.matchmakingState.prototype = {
 			console.log("[DEBUG] Joining room...");
 		}
 		
+		
 		let message = {
 			event : 'JOIN ROOM',
 		}
