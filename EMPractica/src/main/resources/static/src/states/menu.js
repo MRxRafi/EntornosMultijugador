@@ -76,8 +76,7 @@ Spacewar.menuState.prototype = {
 
 	play : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			//game.state.start('lobbyState')
-			game.state.start('matchmakingState')
+			game.state.start('lobbyState')
 		}
 	},
 	

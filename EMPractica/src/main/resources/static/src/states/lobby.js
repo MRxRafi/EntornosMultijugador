@@ -36,10 +36,10 @@ Spacewar.lobbyState.prototype = {
                 // Indica a qué función llamar dependiendo de qué texto se trate
                 switch(i){
                     case 0:
-                        //menuText[i].events.onInputDown.add(this.play,this);
+                        lobbyText[i].events.onInputDown.add(this.crear,this);
                         break;
                     case 1:
-                        // menuText[i].events.onInputDown.add(this.options,this);
+                        //lobbyText[i].events.onInputDown.add(this.buscar,this);
                         break;
                 }
 
@@ -48,8 +48,14 @@ Spacewar.lobbyState.prototype = {
 		//game.state.start('matchmakingState')
 	},
 
-	update : function() {
-		
+	crear : function() {
+		if (typeof game.global.myPlayer.id !== 'undefined') {
+			game.state.start('matchmakingState')
+		}
+	},
+
+	buscar : function() {
+
 	},
 
 	//Recibe como parámetro un texto  
