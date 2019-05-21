@@ -16,12 +16,14 @@ public class Player extends Spaceship {
 	private final int playerId;
 	private final String shipType;
 	private String name;
+	private String actualRoom;
 	
 	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
 		this.playerId = playerId;
 		this.session = session;
 		this.shipType = this.getRandomShipType();
+		this.name = "";
 	}
 
 	// METHODS
@@ -49,6 +51,14 @@ public class Player extends Spaceship {
 		this.name = n;
 	}
 	
+	public String getActualRoom() {
+		return actualRoom;
+	}
+
+	public void setActualRoom(String actualRoom) {
+		this.actualRoom = actualRoom;
+	}
+
 	private String getRandomShipType() {
 		String[] randomShips = { "blue", "darkgrey", "green", "metalic", "orange", "purple", "red" };
 		String ship = (randomShips[new Random().nextInt(randomShips.length)]);
