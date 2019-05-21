@@ -10,6 +10,7 @@ window.onload = function() {
 		myPlayer : new Object(),
 		myInterface : new Object(),
 		otherPlayers : [],
+		gameList : [],
 		projectiles : []
 	}
 
@@ -36,6 +37,13 @@ window.onload = function() {
 		var msg = JSON.parse(message.data)
 		
 		switch (msg.event) {
+		case 'PARTIDAS':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] PARTIDAS message recieved')
+				console.dir(msg)
+			}
+			game.global.gameList=msg.waitRoomMap
+			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] JOIN message recieved')
@@ -143,6 +151,7 @@ window.onload = function() {
 	game.state.add('matchmakingState', Spacewar.matchmakingState)
 	game.state.add('roomState', Spacewar.roomState)
 	game.state.add('gameState', Spacewar.gameState)
+	game.state.add('selectRoomState', Spacewar.selectRoomState)
 
 	game.state.start('bootState')
 

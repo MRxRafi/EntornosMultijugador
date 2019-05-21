@@ -51,6 +51,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
 
 			switch (node.get("event").asText()) {
+			case "PARTIDAS":
+				msg.put("event", "MAPA");
+				msg.put("waitRoomMap", (JsonNode) game.waitRooms);
 			case "PLAYER NAME":
 				player.setName(node.get("playerName").asText());
 				break;
