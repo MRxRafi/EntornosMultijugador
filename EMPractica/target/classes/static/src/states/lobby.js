@@ -57,6 +57,8 @@ Spacewar.lobbyState.prototype = {
 					event : 'CREATE ROOM',
 					sala: name
 				}
+				game.global.socket.send(JSON.stringify(message))
+				valido=game.global.validRoom;
 			}
 			game.state.start('roomState')
 		}
