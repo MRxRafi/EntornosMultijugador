@@ -39,7 +39,7 @@ Spacewar.lobbyState.prototype = {
                         lobbyText[i].events.onInputDown.add(this.crear,this);
                         break;
                     case 1:
-                        //lobbyText[i].events.onInputDown.add(this.buscar,this);
+                        lobbyText[i].events.onInputDown.add(this.buscar,this);
                         break;
                 }
 
@@ -50,11 +50,14 @@ Spacewar.lobbyState.prototype = {
 
 	crear : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			game.state.start('matchmakingState')
+
+			inputAnotherRoomName(); // objects/functions.js
 		}
 	},
 
 	buscar : function() {
-
+		if (typeof game.global.myPlayer.id !== 'undefined') {
+			game.state.start('selectRoomState')
+		}
 	},
 }

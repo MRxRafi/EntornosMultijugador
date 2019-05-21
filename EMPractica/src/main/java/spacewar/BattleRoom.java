@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,17 @@ public class BattleRoom extends GenericRoom {
 	private ScheduledFuture<?> task;
 	
 	ObjectMapper mapper = new ObjectMapper();
+	
+	public BattleRoom(String nombre, ScheduledExecutorService scheduler) {
+		this.nombre = nombre;
+		this.battleScheduler = scheduler;
+	}
+	
+	public BattleRoom(String nombre, Map<String, Player> players, ScheduledExecutorService scheduler) {
+		this.nombre = nombre;
+		this.battleScheduler = scheduler;
+		this.Jugadores = players;
+	}
 	
 	public BattleRoom(String nombre, Player player, ScheduledExecutorService scheduler) {
 		super(nombre, player);
@@ -51,6 +63,7 @@ public class BattleRoom extends GenericRoom {
 	
 	/* Starts the Scheduled Executor, running the tick() method every TICK_DELAY milliseconds*/
 	public void startGameLoop() {
+		battleScheduler = Executors.newScheduledThreadPool(1);
 		task = battleScheduler.scheduleAtFixedRate(() -> tick(), TICK_DELAY, TICK_DELAY, TimeUnit.MILLISECONDS);
 	}
 	

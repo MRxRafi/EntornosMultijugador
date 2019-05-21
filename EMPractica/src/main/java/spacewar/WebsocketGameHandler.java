@@ -37,6 +37,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("event", "JOIN");
 		msg.put("id", player.getPlayerId());
 		msg.put("shipType", player.getShipType());
+		msg.put("room", "lobby");
+		player.setActualRoom("lobby");
 		player.getSession().sendMessage(new TextMessage(msg.toString()));
 		
 		game.lobby.addJugador(player);
@@ -51,6 +53,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
 
 			switch (node.get("event").asText()) {
+			case "PARTIDAS":
+				msg.put("event", "PARTIDAS");
+				msg.put("waitRoomMap", (JsonNode) game.waitRooms);
 			case "PLAYER NAME":
 				player.setName(node.get("playerName").asText());
 				break;
@@ -61,16 +66,38 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 				
-			//Crear caso create room
+				//Crear caso create room
 			case "CREATE ROOM":
 				
+				boolean aux=game.waitRooms.containsKey(msg.path("sala").asText());
+				if(!aux) {
+					game.waitRooms.put(msg.path("sala").asText(), new WaitRoom(msg.path("sala").asText(),player));
+					aux = true;
+				} else {
+					aux = false;
+				}
+				msg.put("event","CREATE ROOM");
+				msg.put("valido", aux);
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+				
 			case "JOIN ROOM":
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");
-				player.setActualRoom(node.path("room").asText());
-				msg.put("room", player.getActualRoom());
-
+				String sala_actual = player.getActualRoom();
+				
+				String sala_destino = node.path("room").asText();
+				player.setActualRoom(sala_destino);
+				msg.put("room", sala_destino);
+				
+				ObjectNode delete_msg = mapper.createObjectNode();
+				delete_msg.put("event", "REMOVE PLAYER");
+				delete_msg.put("id", player.getPlayerId());
+				game.deletePlayerFromRoom(sala_actual, player, delete_msg);
+				
+				// Si hemos pasado de una room a una battleroom hay que ver que hacemos..
+				game.addPlayerToRoom(sala_destino, player);
+				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "UPDATE MOVEMENT":
@@ -104,16 +131,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("event", "REMOVE PLAYER");
 		msg.put("id", player.getPlayerId());
 		
-		if(sala_actual == "lobby") {
-			game.lobby.deleteJugador(player);
-			game.lobby.broadcast(msg.toString());
-		} else if(game.battleRooms.containsKey(sala_actual)) {
-			game.battleRooms.get(sala_actual).deleteJugador(player);
-			game.battleRooms.get(sala_actual).broadcast(msg.toString());
-		} else if(game.waitRooms.containsKey(sala_actual)) {
-			game.waitRooms.get(sala_actual).deleteJugador(player);
-			game.waitRooms.get(sala_actual).broadcast(msg.toString());
-		}
+		game.deletePlayerFromRoom(sala_actual, player, msg);
 		
 	}
 }

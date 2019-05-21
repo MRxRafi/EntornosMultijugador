@@ -10,6 +10,8 @@ window.onload = function() {
 		myPlayer : new Object(),
 		myInterface : new Object(),
 		otherPlayers : [],
+		gameList : [],
+		validRoom: false,
 		projectiles : []
 	}
 
@@ -36,6 +38,13 @@ window.onload = function() {
 		var msg = JSON.parse(message.data)
 		
 		switch (msg.event) {
+		case 'PARTIDAS':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] PARTIDAS message recieved')
+				console.dir(msg)
+			}
+			game.global.gameList=msg.waitRoomMap
+			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] JOIN message recieved')
@@ -47,14 +56,28 @@ window.onload = function() {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 			}
 			break
+		case 'CREATE ROOM':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] CREATE ROOM message recieved')
+				console.dir(msg)
+			}
+			game.global.validRoom=msg.valido;
+			if(!msg.valido){
+				// Funcion pregunta de nuevo el nombre
+				inputAnotherRoomName();
+			} else{
+				// Pasamos a la siguiente sala
+				game.global.myPlayer.room=msg.sala;
+				game.state.start('roomState')
+			}
+			
+			break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')
 				console.dir(msg)
 			}
-			game.global.myPlayer.room = {
-					name : msg.room
-			}
+			game.global.myPlayer.room = msg.room;
 			break
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {
@@ -143,6 +166,7 @@ window.onload = function() {
 	game.state.add('matchmakingState', Spacewar.matchmakingState)
 	game.state.add('roomState', Spacewar.roomState)
 	game.state.add('gameState', Spacewar.gameState)
+	game.state.add('selectRoomState', Spacewar.selectRoomState)
 
 	game.state.start('bootState')
 

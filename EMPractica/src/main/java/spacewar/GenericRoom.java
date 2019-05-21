@@ -13,6 +13,8 @@ public class GenericRoom {
 	protected AtomicInteger numPlayers = new AtomicInteger(0);
 	protected String nombre;
 	
+	public GenericRoom() { }
+	
 	public GenericRoom(String nombre, Player player) {
 		Jugadores.put(player.getSession().getId(), player);
 		numPlayers.incrementAndGet();
@@ -20,8 +22,8 @@ public class GenericRoom {
 	}
 	
 	/* Returns a collection containing all the values from the players structure */
-	public List<Player> getPlayers() {
-		return (List<Player>) Jugadores.values();
+	public Collection<Player> getPlayers() {
+		return Jugadores.values();
 	}
 
 	public void addJugador(Player p) {
@@ -33,7 +35,15 @@ public class GenericRoom {
 		Jugadores.remove(p.getSession().getId());
 		numPlayers.decrementAndGet();
 	}
-
+	
+	public int incrementNumJugadores() {
+		return numPlayers.incrementAndGet();
+	}
+	
+	public int getNumJugadores() {
+		return numPlayers.get();
+	}
+	
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
