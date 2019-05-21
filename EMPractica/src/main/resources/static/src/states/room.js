@@ -15,10 +15,11 @@ Spacewar.roomState.prototype = {
 	},
 
 	create : function() {
+		
 
 	},
 
 	update : function() {
-		game.state.start('gameState')
+		//game.state.start('gameState')
 	}
 }
