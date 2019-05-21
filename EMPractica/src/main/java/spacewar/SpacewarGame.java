@@ -31,7 +31,7 @@ public class SpacewarGame {
 	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 	
 	// GLOBAL GAME ROOM --> lobby
-	public GenericRoom lobby;
+	public GenericRoom lobby = new GenericRoom();
 	
 	// ROOMS
 	public Map<String, WaitRoom> waitRooms = new ConcurrentHashMap<>();
@@ -41,7 +41,9 @@ public class SpacewarGame {
 	
 	// BUILDER
 	private SpacewarGame() {
-
+		waitRooms.put("room", new WaitRoom("room"));
+		battleRooms.put("game", new BattleRoom("game", scheduler));
+		battleRooms.get("game").startGameLoop();
 	}
 
 	// METHODS
@@ -51,6 +53,28 @@ public class SpacewarGame {
 		if (scheduler != null) {
 			scheduler.shutdown();
 			
+		}
+	}
+	
+	public void addPlayerToRoom(String destinyRoom, Player player) {
+		if(destinyRoom == "lobby") {
+			lobby.addJugador(player);
+		} else if(battleRooms.containsKey(destinyRoom)) {
+			battleRooms.get(destinyRoom).addJugador(player);
+		} else if(waitRooms.containsKey(destinyRoom)) {
+			waitRooms.get(destinyRoom).addJugador(player);
+		}
+		
+	}
+	
+	public void deletePlayerFromRoom(String actualRoom, Player player, ObjectNode msg) {
+		if(actualRoom == "lobby") {
+			lobby.deleteJugador(player);
+		} else if(battleRooms.containsKey(actualRoom)) {
+			battleRooms.get(actualRoom).deleteJugador(player);
+			battleRooms.get(actualRoom).broadcast(msg.toString());
+		} else if(waitRooms.containsKey(actualRoom)) {
+			waitRooms.get(actualRoom).deleteJugador(player);
 		}
 	}
 }

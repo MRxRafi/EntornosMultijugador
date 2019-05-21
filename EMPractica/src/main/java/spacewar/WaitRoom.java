@@ -4,6 +4,10 @@ public class WaitRoom extends GenericRoom {
 	
 	private int IdHost;
 	
+	public WaitRoom(String nombre) {
+		this.nombre = nombre;
+	}
+	
 	public WaitRoom(String nombre, Player player) {
 		super(nombre, player);
 		// TODO Auto-generated constructor stub
@@ -15,7 +19,7 @@ public class WaitRoom extends GenericRoom {
 	}
 	
 	public void setIdHost() {
-		if(getPlayers().size()>0)
-			this.IdHost=getPlayers().get(0).getPlayerId();
+		//if(getPlayers().size()>0)
+		//	this.IdHost=getPlayers().get(0).getPlayerId();
 	}
 }

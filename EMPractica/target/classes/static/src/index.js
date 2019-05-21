@@ -57,22 +57,35 @@ window.onload = function() {
 			}
 			break
 		case 'CREATE ROOM':
-				if (game.global.DEBUG_MODE) {
-					console.log('[DEBUG] CREATE ROOM message recieved')
-					console.dir(msg)
-				}
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] CREATE ROOM message recieved')
+				console.dir(msg)
+			}
+<<<<<<< HEAD
+			game.global.validRoom=msg.valido;
+			if(!msg.valido){
+				// Funcion pregunta de nuevo el nombre
+				inputAnotherRoomName();
+			} else{
+				// Pasamos a la siguiente sala
+				game.global.myPlayer.room=msg.sala;
+				game.state.start('roomState')
+			}
+			
+=======
 
-				game.global.validRoom=msg.valido;
-				if(game.global.validRoom){
-					game.global.myPlayer.room=msg.sala;
-				}
-				break
+			game.global.validRoom=msg.valido;
+			if(game.global.validRoom){
+				game.global.myPlayer.room=msg.sala;
+			}
+>>>>>>> a65316bee685a668b4f7fd6db5495d656ff98a90
+			break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')
 				console.dir(msg)
 			}
-			game.global.myPlayer.room = msg.room;			
+			game.global.myPlayer.room = msg.room;
 			break
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {
