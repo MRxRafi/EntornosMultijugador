@@ -57,6 +57,7 @@ Spacewar.lobbyState.prototype = {
 			// escrito en la barra de texto. Si no hay nada escrito salta una alerta
 			inputRoom.submitButton.onclick = function() {
 				if (inputRoom.input.value !== "") {
+					//HAY QUE COMPROBAR QUE EL NOMBRE NO ESTÉ YA ESCOGIDO
 					setRoomName(inputRoom.input.value); // objects/functions.js
 					inputRoom.hide();
 				} else {

@@ -1,5 +1,6 @@
 package spacewar;
 
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.socket.CloseStatus;
@@ -131,6 +132,25 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
 					game.battleRooms.get(player.getActualRoom()).addProjectile(projectile.getId(), projectile);
 				}
+				break;
+			case "START GAME":
+				msg.put("event", "NEW GAME");
+				String room = node.get("room").asText();
+				if(game.waitRooms.containsKey(room)) {
+					//Si contiene la room, creamos una battleRoom y mandamos mensaje al cliente
+					Map<String, Player> mp = game.waitRooms.get(room).Jugadores;
+					game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
+					game.battleRooms.get(room).startGameLoop();
+					
+					msg.put("response", "valido");
+					msg.put("room", room);
+				} else {
+					//Si no la contiene, mandamos un error (no debería ocurrir)
+					String error = "Error al crear battleRoom. La room especificada no está en waitRooms.";
+					msg.put("response", error);
+				}
+				
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			default:
 				break;

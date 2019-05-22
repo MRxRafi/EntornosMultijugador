@@ -77,14 +77,27 @@ window.onload = function() {
 			}
 			game.global.validRoom=msg.valido;
 			if(!msg.valido){
-				// Funcion pregunta de nuevo el nombre
-				inputAnotherRoomName();
+				// Funcion pregunta de nuevo el nombre (arreglarloo)
+				//setRoomName();
 			} else{
 				// Pasamos a la siguiente sala
 				game.global.myPlayer.room=msg.sala;
 				game.state.start('roomState')
 			}
 			
+			break
+		case 'NEW GAME':
+			if(game.global.DEBUG_MODE){
+				console.log('[DEBUG] NEW GAME message received')
+				console.dir(msg)
+			}
+			if(msg.response === "valido"){
+				//Game phase
+				game.state.start('gameState');
+			} else {
+				//Error
+				console.log(msg.response);
+			}
 			break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {

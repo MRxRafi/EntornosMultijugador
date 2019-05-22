@@ -24,6 +24,20 @@ Spacewar.menuState.prototype = {
 	},
 
 	create : function() {
+		// Se crea una barra de texto
+		var inputName = new inputText("rgb(0,130,130)", "white",
+				"Introduzca su nombre de usuario:", "Aceptar");
+		// Al pulsar el botón se asigna al nombre del jugador el valor escrito
+		// en la barra de texto. Si no hay nada escrito salta una alerta
+		inputName.submitButton.onclick = function() {
+			if (inputName.input.value !== "") {
+				setPlayerName(inputName.input.value); // objects/functions.js
+				inputName.hide();
+			} else {
+				alert("El nombre de usuario está vacío")
+			}
+		};
+
 		// Estilos de texto
 		var titleStyle = {
 			fill : "rgb(255,255,255)",
@@ -36,52 +50,50 @@ Spacewar.menuState.prototype = {
 			boundsAlignH : "center"
 		};
 		// Se pide un nombre de usuario y se envía al servidor
-		let name = window.prompt("Introduzca su nombre de usuario: ");
-		game.global.myPlayer.name = name;
-		
-		let message = {
-			event : 'PLAYER NAME',
-			playerName : game.global.myPlayer.name
-		}
-		game.global.socket.send(JSON.stringify(message))
-		// Crea el texto del Título
-        var titleText = game.add.text(0,0,"SPACE WAR",titleStyle);
-        titleText.setTextBounds(0,0,game.world.width,game.world.height);
-        
-        // Crea el texto de las opciones del menú
-        menuOptions=["Jugar", "Opciones"];
-        var y=game.canvas.height/3;
-        var yOffset= 80;
-        var menuText=[];
-        for(var i= 0; i<menuOptions.length; i++)
-            {
-                menuText[i] = game.add.text(0, y, menuOptions[i], style);
-                menuText[i].setTextBounds(0,0,game.world.width,game.world.height);
-                // Añade detección de eventos en cada texto
-                menuText[i].inputEnabled = true;
-                menuText[i].events.onInputOver.add(mouseOver,this);
-                menuText[i].events.onInputOut.add(mouseOut,this);
-                // Indica a qué función llamar dependiendo de qué texto se trate
-                switch(i){
-                    case 0:
-                        menuText[i].events.onInputDown.add(this.play,this);
-                        break;
-                    case 1:
-                        // menuText[i].events.onInputDown.add(this.options,this);
-                        break;
-                }
 
-                y+= yOffset;
-            }
+		// Crea el texto del Título
+		var titleText = game.add.text(0, 0, "SPACE WAR", titleStyle);
+		titleText.setTextBounds(0, 0, game.world.width, game.world.height);
+
+		// Crea el texto de las opciones del menú
+		menuOptions = [ "Jugar", "Opciones" ];
+		var y = game.canvas.height / 3;
+		var yOffset = 80;
+		var menuText = [];
+		for (var i = 0; i < menuOptions.length; i++) {
+			menuText[i] = game.add.text(0, y, menuOptions[i], style);
+			menuText[i]
+					.setTextBounds(0, 0, game.world.width, game.world.height);
+			// Añade detección de eventos en cada texto
+			menuText[i].inputEnabled = true;
+			menuText[i].events.onInputOver.add(mouseOver, this);
+			menuText[i].events.onInputOut.add(mouseOut, this);
+			// Indica a qué función llamar dependiendo de qué texto se trate
+			switch (i) {
+			case 0:
+				menuText[i].events.onInputDown.add(this.play, this);
+				break;
+			case 1:
+				// menuText[i].events.onInputDown.add(this.options,this);
+				break;
+			}
+
+			y += yOffset;
+		}
 	},
 
 	play : function() {
-		if (typeof game.global.myPlayer.id !== 'undefined') {
+		// Si el jugador tiene un id y un nombre asignado, pasa al siguiente
+		// estado
+		if (typeof game.global.myPlayer.id !== 'undefined'
+				&& typeof game.global.myPlayer.name !== 'undefined') {
 			game.state.start('lobbyState')
+		} else {
+			alert("Inserte su nombre de usuario");
 		}
 	},
-	
+
 	options : function() {
-		
+
 	},
 }

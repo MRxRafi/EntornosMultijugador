@@ -28,7 +28,7 @@ public class SpacewarGame {
 	// FIXED VALUES AND VARIABLES
 	public final static SpacewarGame INSTANCE = new SpacewarGame();
 
-	private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
+	public ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(10);
 	
 	// GLOBAL GAME ROOM --> lobby
 	public GenericRoom lobby = new GenericRoom();
