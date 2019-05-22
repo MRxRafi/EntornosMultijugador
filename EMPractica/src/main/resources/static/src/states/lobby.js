@@ -63,5 +63,5 @@ Spacewar.lobbyState.prototype = {
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}
-	},
+	}
 }

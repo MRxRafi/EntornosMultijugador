@@ -5,11 +5,12 @@ Spacewar.selectRoomState = function(game) {
 		boundsAlignH : "center"
 	},
 	index=0,
-	numPartidas=7,
+	numPartidas=100,
 	tick=0,
 	y=20,
 	yOffset= 80,
-	gameText=[]
+	gameText=[],
+	room='undefined'
 }
 
 
@@ -44,8 +45,6 @@ Spacewar.selectRoomState.prototype = {
 		 // Crea el texto de las opciones del menú		 
 
 		game.kineticScrolling.start(); //Comenzamos el scroll
-		
-		game.world.setBounds(0, 0, game.width, 100 * numPartidas);
 		for(var i= 0; i<numPartidas; i++)
 		{
 			if(i<game.global.gameList.length){
@@ -64,14 +63,11 @@ Spacewar.selectRoomState.prototype = {
 				gameText[i].events.onInputOver.add(mouseOver,this);
 				gameText[i].events.onInputOut.add(mouseOut,this);
 			}
-
-			
+			gameText[i].events.onInputDown.add(this.select, this);		
 			y+= yOffset;
 			
 		}
-		
-		
-		y=20
+		game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
 		console.log(gameText)
 	},
 
@@ -85,7 +81,6 @@ Spacewar.selectRoomState.prototype = {
 				game.global.socket.send(JSON.stringify(message))
 			}
 			tick=0
-			gameText[0].setText(gameText[0]+"aa")
 		}
 		var auxIndex=index;
 		
@@ -98,7 +93,29 @@ Spacewar.selectRoomState.prototype = {
 				gameText[i].setText("")
 			}
 		}
+		game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
 		
+		if (game.global.myPlayer.room === room) {
+			if (game.global.DEBUG_MODE) {
+				console.log("[DEBUG] Joined room " + game.global.myPlayer.room);
+			}
+			game.state.start('roomState')
+		}
+
 		tick++;
+	},
+
+	select : function(sala) {
+		var arr=sala.text.split(" ")
+		console.log(arr[1])
+		room=arr[1]
+		if (typeof game.global.myPlayer.id !== 'undefined') {
+			
+			let message = {
+				event : 'JOIN ROOM',
+				room: arr[1]
+			}
+			game.global.socket.send(JSON.stringify(message))
+		}
 	}
 }

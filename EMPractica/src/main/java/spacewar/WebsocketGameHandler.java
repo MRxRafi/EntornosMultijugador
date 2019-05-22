@@ -106,7 +106,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");
 				String sala_actual = player.getActualRoom();
-				
+				System.out.println(node.path("room").asText());
 				String sala_destino = node.path("room").asText();
 				player.setActualRoom(sala_destino);
 				msg.put("room", sala_destino);
