@@ -43,7 +43,21 @@ window.onload = function() {
 				console.log('[DEBUG] PARTIDAS message recieved')
 				console.dir(msg)
 			}
-			game.global.gameList=msg.waitRoomMap
+			var lista=JSON.parse(msg.partidas)
+			console.log(lista)
+			game.global.gameList=lista;	
+			console.log(game.global.gameList)
+			game.state.start('selectRoomState')		
+			break;
+		case 'UPDATE PARTIDAS':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] PARTIDAS message recieved')
+				console.dir(msg)
+			}
+			var lista=JSON.parse(msg.partidas)
+			console.log(lista)
+			game.global.gameList=lista;	
+			console.log(game.global.gameList)
 			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {

@@ -43,6 +43,21 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		
 		game.lobby.addJugador(player);
 	}
+	
+	public String getWaitRooms() {
+		int aux=0;
+		String s="[{";
+		for(WaitRoom wr : game.waitRooms.values()) {
+			if(aux>0)
+				s+=",{";
+			s+=wr.toString();
+			s+="}";
+			aux++;
+			
+		}
+		s+="]";
+		return s;
+	}
 
 	/* When a message comes, this method is executed */
 	@Override
@@ -53,9 +68,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
 
 			switch (node.get("event").asText()) {
-			case "PARTIDAS":
-				msg.put("event", "PARTIDAS");
-				msg.put("waitRoomMap", (JsonNode) game.waitRooms);
 			case "PLAYER NAME":
 				player.setName(node.get("playerName").asText());
 				break;
@@ -77,9 +89,19 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				}
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
+				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
-				
+			case "PARTIDAS":
+				msg.put("event", "PARTIDAS");
+				msg.put("partidas", getWaitRooms());
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
+			case "UPDATE PARTIDAS":
+				msg.put("event", "UPDATE PARTIDAS");
+				msg.put("partidas", getWaitRooms());
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
 			case "JOIN ROOM":
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");

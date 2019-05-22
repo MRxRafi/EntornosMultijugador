@@ -57,7 +57,11 @@ Spacewar.lobbyState.prototype = {
 
 	buscar : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			game.state.start('selectRoomState')
+			
+			let message = {
+				event : 'PARTIDAS'
+			}
+			game.global.socket.send(JSON.stringify(message))
 		}
 	},
 }

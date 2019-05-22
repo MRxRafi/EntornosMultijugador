@@ -52,6 +52,11 @@ public class GenericRoom {
 		return this.nombre;
 	}
 	
+	public String toString() {
+		
+		return "\"numJug\":\"" + getNumJugadores() +"\", \"sala\":\"" + getNombre() + "\"" ;
+	}
+	
 	/* Broadcasts a message to every player in the global room */
 	public void broadcast(String message) {
 		for (Player player : getPlayers()) {
