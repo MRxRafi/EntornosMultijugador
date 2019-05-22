@@ -11,7 +11,7 @@ Spacewar.gameState.prototype = {
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Entering **GAME** state");
 		}
-		game.world.setBounds(0, 0, game.width, 600);
+		game.world.setBounds(0, 0, 3000, 3000);
 	},
 
 	preload : function() {

@@ -41,11 +41,7 @@ public class SpacewarGame {
 	
 	// BUILDER
 	private SpacewarGame() {
-		for (int i=0;i<89;i++) {
-			waitRooms.put("wait"+i, new WaitRoom("wait"+i));
-		}
-		/*battleRooms.put("game", new BattleRoom("game", scheduler));
-		battleRooms.get("game").startGameLoop();*/
+		
 	}
 
 	// METHODS

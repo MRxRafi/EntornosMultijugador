@@ -108,8 +108,8 @@ window.onload = function() {
 			break
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {
-				console.log('[DEBUG] GAME STATE UPDATE message recieved')
-				console.dir(msg)
+				//console.log('[DEBUG] GAME STATE UPDATE message recieved')
+				//console.dir(msg)
 			}
 			if (typeof game.global.myPlayer.image !== 'undefined') {
 				for (var player of msg.players) {

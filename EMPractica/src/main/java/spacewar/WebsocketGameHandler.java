@@ -90,6 +90,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				}
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
+				msg.put("sala", node.path("sala").asText());
+				player.setActualRoom(node.path("sala").asText());
 				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
@@ -139,6 +141,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				if(game.waitRooms.containsKey(room)) {
 					//Si contiene la room, creamos una battleRoom y mandamos mensaje al cliente
 					Map<String, Player> mp = game.waitRooms.get(room).Jugadores;
+					System.out.println(mp.keySet().size());
 					game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
 					game.battleRooms.get(room).startGameLoop();
 					
