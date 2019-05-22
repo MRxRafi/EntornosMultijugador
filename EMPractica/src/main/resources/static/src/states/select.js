@@ -12,12 +12,24 @@ Spacewar.selectRoomState = function(game) {
 	gameText=[]
 }
 
+
 Spacewar.selectRoomState.prototype = {
 
 	init : function() {
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Entering **SELECTROOM** state");
 		}
+		
+		game.kineticScrolling = game.plugins.add(Phaser.Plugin.KineticScrolling);
+		game.kineticScrolling.configure({
+		    kineticMovement: true,
+		    timeConstantScroll: 325, //really mimic iOS
+		    horizontalScroll: false,
+		    verticalScroll: true,
+		    horizontalWheel: false,
+		    verticalWheel: true,
+		    deltaWheel: 40
+		});
 	},
 
 	preload : function() {
@@ -31,29 +43,34 @@ Spacewar.selectRoomState.prototype = {
 		console.log(game.global.gameList.length)
 		 // Crea el texto de las opciones del menú		 
 
-
+		game.kineticScrolling.start(); //Comenzamos el scroll
+		
+		game.world.setBounds(0, 0, game.width, 100 * numPartidas);
 		for(var i= 0; i<numPartidas; i++)
 		{
 			if(i<game.global.gameList.length){
-			gameText[i] = game.add.text(0, y, "["+(i+1)+"] "+game.global.gameList[i].sala, style);
-			gameText[i].setTextBounds(0,0,game.world.width,game.world.height);
-			// Añade detección de eventos en cada texto
-			gameText[i].inputEnabled = true;
-			gameText[i].events.onInputOver.add(mouseOver,this);
-			gameText[i].events.onInputOut.add(mouseOut,this);
+				gameText[i] = game.add.text(0, y, "["+(i+1)+"] "+game.global.gameList[i].sala, style);
+				gameText[i].setTextBounds(0,0,game.world.width,game.world.height);
+				// Añade detección de eventos en cada texto
+				gameText[i].inputEnabled = true;
+				gameText[i].events.onInputOver.add(mouseOver,this);
+				gameText[i].events.onInputOut.add(mouseOut,this);
 			}
 			else{
-			gameText[i] = game.add.text(0, y, "", style);
-			gameText[i].setTextBounds(0,0,game.world.width,game.world.height);
-			// Añade detección de eventos en cada texto
-			gameText[i].inputEnabled = true;
-			gameText[i].events.onInputOver.add(mouseOver,this);
-			gameText[i].events.onInputOut.add(mouseOut,this);
+				gameText[i] = game.add.text(0, y, "", style);
+				gameText[i].setTextBounds(0,0,game.world.width,game.world.height);
+				// Añade detección de eventos en cada texto
+				gameText[i].inputEnabled = true;
+				gameText[i].events.onInputOver.add(mouseOver,this);
+				gameText[i].events.onInputOut.add(mouseOut,this);
 			}
 
 			
 			y+= yOffset;
+			
 		}
+		
+		
 		y=20
 		console.log(gameText)
 	},

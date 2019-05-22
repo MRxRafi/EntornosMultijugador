@@ -41,6 +41,17 @@ public class SpacewarGame {
 	
 	// BUILDER
 	private SpacewarGame() {
+		waitRooms.put("wait1", new WaitRoom("wait1"));
+		waitRooms.put("wait2", new WaitRoom("wait2"));
+		waitRooms.put("wait3", new WaitRoom("wait3"));
+		waitRooms.put("wait4", new WaitRoom("wait4"));
+		waitRooms.put("wait5", new WaitRoom("wait5"));
+		waitRooms.put("wait6", new WaitRoom("wait6"));
+		waitRooms.put("wait7", new WaitRoom("wait7"));
+		waitRooms.put("wait8", new WaitRoom("wait8"));
+		waitRooms.put("wait9", new WaitRoom("wait9"));
+		waitRooms.put("wait10", new WaitRoom("wait10"));
+		waitRooms.put("wait11", new WaitRoom("wait11"));
 		battleRooms.put("game", new BattleRoom("game", scheduler));
 		battleRooms.get("game").startGameLoop();
 	}
