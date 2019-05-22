@@ -48,7 +48,8 @@ Spacewar.selectRoomState.prototype = {
 		for(var i= 0; i<numPartidas; i++)
 		{
 			if(i<game.global.gameList.length){
-				gameText[i] = game.add.text(0, y, "["+(i+1)+"] "+game.global.gameList[i].sala, style);
+				console.log(game.global.gameList[i].numJug)
+				gameText[i] = game.add.text(0, y, "["+(i+1)+"] "+game.global.gameList[i].sala+" -> "+game.global.gameList[i].numJug+"/30", style);
 				gameText[i].setTextBounds(0,0,game.world.width,game.world.height);
 				// Añade detección de eventos en cada texto
 				gameText[i].inputEnabled = true;
@@ -87,7 +88,7 @@ Spacewar.selectRoomState.prototype = {
 		for(var i= 0; i<numPartidas; i++)
 		{
 			if(i<game.global.gameList.length){
-				gameText[i].setText("["+(i+1)+"] "+game.global.gameList[i].sala)
+				gameText[i].setText("["+(i+1)+"] "+game.global.gameList[i].sala+" -> "+game.global.gameList[i].numJug+"/30")
 			}
 			else{
 				gameText[i].setText("")

@@ -92,7 +92,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
 				player.setActualRoom(node.path("sala").asText());
-				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 			case "PARTIDAS":
