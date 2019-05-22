@@ -100,6 +100,11 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("partidas", getWaitRooms());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+			case "UPDATE PARTIDAS":
+				msg.put("event", "UPDATE PARTIDAS");
+				msg.put("partidas", getWaitRooms());
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
 			case "JOIN ROOM":
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
 				msg.put("event", "NEW ROOM");
