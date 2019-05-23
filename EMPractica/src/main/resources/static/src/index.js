@@ -100,10 +100,6 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			if(msg.response === "valido"){
-				//Game phase
-				//console.log("ID jug: " + game.global.myPlayer.id)
-				//console.log("ID host: " + game.global.myRoom.hostId)
-				
 				if(game.global.myPlayer.id == game.global.myRoom.idHost){
 					game.state.start('gameState');
 				} else{

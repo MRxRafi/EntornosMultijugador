@@ -100,10 +100,13 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			if(msg.response === "valido"){
+<<<<<<< HEAD
 				//Game phase
 				//console.log("ID jug: " + game.global.myPlayer.id)
 				//console.log("ID host: " + game.global.myRoom.hostId)
 				
+=======
+>>>>>>> 94e48c2854a5c32aa8394474ca0235c5201933a3
 				if(game.global.myPlayer.id == game.global.myRoom.idHost){
 					game.state.start('gameState');
 				} else{
