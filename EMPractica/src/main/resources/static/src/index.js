@@ -88,6 +88,12 @@ window.onload = function() {
 			}
 			
 			break
+			
+		case 'UPDATE NUMJUG':
+			game.global.myRoom.numJugadores = msg.numJugadores;
+			
+			break
+			
 		case 'NEW GAME':
 			if(game.global.DEBUG_MODE){
 				console.log('[DEBUG] NEW GAME message received')
@@ -95,7 +101,18 @@ window.onload = function() {
 			}
 			if(msg.response === "valido"){
 				//Game phase
-				game.state.start('gameState');
+				//console.log("ID jug: " + game.global.myPlayer.id)
+				//console.log("ID host: " + game.global.myRoom.hostId)
+				
+				game.global.myRoom.numJugadores = msg.numJugadores;
+				if(game.global.myPlayer.id == game.global.myRoom.idHost){
+					game.state.start('gameState');
+				} else{
+					if(msg.comenzado){
+						game.state.start('gameState');
+					}
+				}
+				
 			} else {
 				//Error
 				console.log(msg.response);

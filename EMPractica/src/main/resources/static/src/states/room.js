@@ -1,5 +1,6 @@
 Spacewar.roomState = function(game) {
-	thick=0
+	tick=0,
+	MAX_JUGADORES = 2
 }
 
 Spacewar.roomState.prototype = {
@@ -24,8 +25,11 @@ Spacewar.roomState.prototype = {
 			boundsAlignH : "center"
 		};
 
+		numJugText = game.add.text(0, game.canvas.height/3 + 80, game.global.myRoom.numJugadores + '/' + MAX_JUGADORES, style)
+		numJugText.setTextBounds(0,0,game.world.width,game.world.height);
+		
 		if(game.global.myPlayer.id==game.global.myRoom.idHost){
-			StartText=game.add.text(0, game.canvas.height/2, 'START', style);
+			StartText=game.add.text(0, game.canvas.height/3, 'START', style);
 			// Añade detección de eventos en cada texto
 			StartText.inputEnabled = true;
 			StartText.events.onInputOver.add(mouseOver,this);
@@ -33,15 +37,23 @@ Spacewar.roomState.prototype = {
 			StartText.events.onInputDown.add(this.startGame,this);
 		}
 		else{
-			StartText=game.add.text(0, game.canvas.height/2, 'Waiting Host', style);
+			StartText=game.add.text(0, game.canvas.height/3, 'Waiting Host', style);
+			
 		}
 		StartText.setTextBounds(0,0,game.world.width,game.world.height);
+		
 	},
 
 	update : function() {
+		let message = {
+			event : 'UPDATE NUMJUG',
+			room : game.global.myPlayer.room
+		}
+		game.global.socket.send(JSON.stringify(message))
+		
+		numJugText.setText(game.global.myRoom.numJugadores + '/' + MAX_JUGADORES)
 		
 		if(game.global.myPlayer.id!==game.global.myRoom.idHost){
-			console.log(tick)
 			if(tick==60){
 				StartText.setText('Waiting Host .')
 			}
@@ -53,14 +65,30 @@ Spacewar.roomState.prototype = {
 				tick=0;
 			}
 			tick++
+			
+			let message = {
+				event : 'START GAME',
+				room : game.global.myPlayer.room
+			}
+			game.global.socket.send(JSON.stringify(message))
+			
+		} else {
+			
+			
+			if(game.global.myRoom.numJugadores == MAX_JUGADORES){
+				
+				this.startGame();
+			}
 		}
+		
 		
 	},
 
 	startGame: function(){
 		let message = {
 			event : 'START GAME',
-			room : game.global.myPlayer.room
+			room : game.global.myPlayer.room,
+			empezar: true
 		}
 		game.global.socket.send(JSON.stringify(message))
 	}

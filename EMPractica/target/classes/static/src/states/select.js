@@ -97,8 +97,8 @@ Spacewar.selectRoomState.prototype = {
 			}
 		}
 		game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
-		console.log("G "+game.global.myPlayer.room)
-		console.log(room)
+		//console.log("G "+game.global.myPlayer.room)
+		//console.log(room)
 		if (game.global.myPlayer.room === room) {
 			if (game.global.DEBUG_MODE) {
 				console.log("[DEBUG] Joined room " + game.global.myPlayer.room);
