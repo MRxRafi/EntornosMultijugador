@@ -14,7 +14,8 @@ window.onload = function() {
 		gameList : [],
 		validRoom: false,
 		projectiles : [],
-		idHost:-1
+		idHost:-1,
+		chat: []
 	}
 
 	game.global.myInterface.otherPlayers = []
@@ -71,6 +72,14 @@ window.onload = function() {
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 			}
+			break
+		case 'CHAT':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] CHAT message recieved')
+				console.dir(msg)
+			}
+			game.global.chat.push(msg.content);
+			document.getElementById("chat").value += "\n" + msg.content;
 			break
 		case 'CREATE ROOM':
 			if (game.global.DEBUG_MODE) {
