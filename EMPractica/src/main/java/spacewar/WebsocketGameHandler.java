@@ -88,6 +88,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				} else {
 					aux = false;
 				}
+				System.out.println(player.getPlayerId());
+				System.out.println(game.waitRooms.get(node.path("sala").asText()).getIdHost());
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
@@ -112,6 +114,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				String sala_destino = node.path("room").asText();
 				player.setActualRoom(sala_destino);
 				msg.put("room", sala_destino);
+				msg.put("idHost", game.waitRooms.get(sala_destino).getIdHost());
 				
 				ObjectNode delete_msg = mapper.createObjectNode();
 				delete_msg.put("event", "REMOVE PLAYER");

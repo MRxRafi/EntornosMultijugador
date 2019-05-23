@@ -55,6 +55,7 @@ Spacewar.selectRoomState.prototype = {
 				gameText[i].inputEnabled = true;
 				gameText[i].events.onInputOver.add(mouseOver,this);
 				gameText[i].events.onInputOut.add(mouseOut,this);
+				gameText[i].events.onInputDown.add(this.select, {sigSala:game.global.gameList[i].sala});
 			}
 			else{
 				gameText[i] = game.add.text(0, y, "", style);
@@ -64,7 +65,7 @@ Spacewar.selectRoomState.prototype = {
 				gameText[i].events.onInputOver.add(mouseOver,this);
 				gameText[i].events.onInputOut.add(mouseOut,this);
 			}
-			gameText[i].events.onInputDown.add(this.select, this);		
+					
 			y+= yOffset;
 			
 		}
@@ -89,13 +90,15 @@ Spacewar.selectRoomState.prototype = {
 		{
 			if(i<game.global.gameList.length){
 				gameText[i].setText("["+(i+1)+"] "+game.global.gameList[i].sala+" -> "+game.global.gameList[i].numJug+"/30")
+				gameText[i].events.onInputDown.add(this.select, {sigSala:game.global.gameList[i].sala});
 			}
 			else{
 				gameText[i].setText("")
 			}
 		}
 		game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
-		
+		console.log("G "+game.global.myPlayer.room)
+		console.log(room)
 		if (game.global.myPlayer.room === room) {
 			if (game.global.DEBUG_MODE) {
 				console.log("[DEBUG] Joined room " + game.global.myPlayer.room);
@@ -107,15 +110,14 @@ Spacewar.selectRoomState.prototype = {
 		tick++;
 	},
 
-	select : function(sala) {
-		var arr=sala.text.split(" ")
-		console.log(arr[1])
-		room=arr[1]
+	select : function() {
+		room=this.sigSala
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-			
+			console.log(this.sigSala)
 			let message = {
 				event : 'JOIN ROOM',
-				room: arr[1]
+				room: this.sigSala
+				//nJug: this.numJugs
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}

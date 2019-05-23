@@ -8,11 +8,13 @@ window.onload = function() {
 		DEBUG_MODE : true,
 		socket : null,
 		myPlayer : new Object(),
+		myRoom : new Object(),
 		myInterface : new Object(),
 		otherPlayers : [],
 		gameList : [],
 		validRoom: false,
-		projectiles : []
+		projectiles : [],
+		idHost:-1
 	}
 
 	game.global.myInterface.otherPlayers = []
@@ -105,6 +107,7 @@ window.onload = function() {
 				console.dir(msg)
 			}
 			game.global.myPlayer.room = msg.room;
+			game.global.myRoom.idHost=msg.idHost;
 			break
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {

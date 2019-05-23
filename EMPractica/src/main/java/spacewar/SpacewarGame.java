@@ -41,6 +41,7 @@ public class SpacewarGame {
 	
 	// BUILDER
 	private SpacewarGame() {
+		
 	}
 
 	// METHODS

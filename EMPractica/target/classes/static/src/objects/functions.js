@@ -3,6 +3,7 @@ function setRoomName(name) {
 		event : 'CREATE ROOM',
 		sala : name
 	}
+	game.global.myRoom.idHost=game.global.myPlayer.id
 	game.global.socket.send(JSON.stringify(message))
 }
 
