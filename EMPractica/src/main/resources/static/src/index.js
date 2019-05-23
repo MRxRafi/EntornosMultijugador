@@ -93,7 +93,7 @@ window.onload = function() {
 			game.global.myRoom.numJugadores = msg.numJugadores;
 			
 			break
-			
+		
 		case 'NEW GAME':
 			if(game.global.DEBUG_MODE){
 				console.log('[DEBUG] NEW GAME message received')
@@ -113,6 +113,13 @@ window.onload = function() {
 				console.log(msg.response);
 			}
 			break
+		case 'INTERFAZ':
+				if (game.global.DEBUG_MODE) {
+					console.log('[DEBUG] INTERFAZ message recieved')
+					console.dir(msg)
+				}
+				game.global.myPlayer.numBullets=msg.numBullets
+				break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')

@@ -1,8 +1,15 @@
 Spacewar.gameState = function(game) {
+	style = {
+		fill : "rgb(255,255,255)",
+		font : "60px Chakra Petch",
+		boundsAlignH : "center"
+	},
+	this.MAX_BULLETS=100
 	this.bulletTime
 	this.fireBullet
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
+	
 }
 
 Spacewar.gameState.prototype = {
@@ -49,16 +56,20 @@ Spacewar.gameState.prototype = {
 	},
 
 	create : function() {
+		game.global.myPlayer.numBullets=100
 		this.bulletTime = 0
 		this.fireBullet = function() {
-			if (game.time.now > this.bulletTime) {
+			if (game.time.now > this.bulletTime && game.global.myPlayer.numBullets>0) {
 				this.bulletTime = game.time.now + 250;
+				game.global.myPlayer.numBullets--
 				// this.weapon.fire()
 				return true
 			} else {
 				return false
 			}
 		}
+
+		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
 
 		this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -75,6 +86,11 @@ Spacewar.gameState.prototype = {
 	},
 
 	update : function() {
+
+		bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
+		bulletsText.x=game.camera.x+10
+		bulletsText.y=game.camera.y+game.canvas.height-100
+
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
 

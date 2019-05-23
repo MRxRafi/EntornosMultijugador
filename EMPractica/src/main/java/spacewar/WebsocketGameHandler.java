@@ -141,6 +141,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
 					game.battleRooms.get(player.getActualRoom()).addProjectile(projectile.getId(), projectile);
 				}
+				
 				break;
 				
 			case "UPDATE NUMJUG":

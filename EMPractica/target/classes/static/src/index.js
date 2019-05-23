@@ -93,18 +93,13 @@ window.onload = function() {
 			game.global.myRoom.numJugadores = msg.numJugadores;
 			
 			break
-			
+		
 		case 'NEW GAME':
 			if(game.global.DEBUG_MODE){
 				console.log('[DEBUG] NEW GAME message received')
 				console.dir(msg)
 			}
 			if(msg.response === "valido"){
-				//Game phase
-				//console.log("ID jug: " + game.global.myPlayer.id)
-				//console.log("ID host: " + game.global.myRoom.hostId)
-				
-				//game.global.myRoom.numJugadores = msg.numJugadores;
 				if(game.global.myPlayer.id == game.global.myRoom.idHost){
 					game.state.start('gameState');
 				} else{
@@ -118,6 +113,13 @@ window.onload = function() {
 				console.log(msg.response);
 			}
 			break
+		case 'INTERFAZ':
+				if (game.global.DEBUG_MODE) {
+					console.log('[DEBUG] INTERFAZ message recieved')
+					console.dir(msg)
+				}
+				game.global.myPlayer.numBullets=msg.numBullets
+				break
 		case 'NEW ROOM' :
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] NEW ROOM message recieved')
