@@ -3,6 +3,7 @@ Spacewar.gameState = function(game) {
 	this.fireBullet
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
+	this.healthBar
 }
 
 Spacewar.gameState.prototype = {
@@ -46,6 +47,14 @@ Spacewar.gameState.prototype = {
 		game.global.myInterface.myPlayerName = game.add.text(game.global.myPlayer.image.x,
 				game.global.myPlayer.image.y + game.global.myPlayer.image.height + 5,
 				game.global.myPlayer.name, {font: "20px Times New Roman", fill: "#FFFFFF", align: "left"});
+		
+		////// BARRA DE VIDA //////
+        barConfig = {width: 50, height: 5, x: game.global.myPlayer.image.x, y: game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5,
+                     bg: {color: 'red'}, bar: {color: 'green'}};
+        healthBar = new HealthBar(game, barConfig);
+        //healthBar.setToGroup(grupo);
+        //healthBar.setFixedToCamera(true);
+        ////// FIN BARRA DE VIDA //////
 	},
 
 	create : function() {
@@ -99,6 +108,8 @@ Spacewar.gameState.prototype = {
 			msg.bullet = this.fireBullet()
 		}
 
+		healthBar.setPosition(game.global.myPlayer.image.x, game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5)
+		
 		if (game.global.DEBUG_MODE) {
 			//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
 		}
