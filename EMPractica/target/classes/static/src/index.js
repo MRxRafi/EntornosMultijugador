@@ -91,7 +91,7 @@ window.onload = function() {
 			
 		case 'UPDATE NUMJUG':
 			game.global.myRoom.numJugadores = msg.numJugadores;
-			
+			//console.log(game.global.myRoom.numJugadores)
 			break
 		
 		case 'NEW GAME':
