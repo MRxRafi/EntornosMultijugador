@@ -15,3 +15,12 @@ function setPlayerName(name) {
 	}
 	game.global.socket.send(JSON.stringify(message))
 }
+
+function sendChatMessage(string){
+	let message = {
+			event : 'CHAT',
+			playerName: game.global.myPlayer.name,
+			content: string
+	}
+	game.global.socket.send(JSON.stringify(message))
+}
