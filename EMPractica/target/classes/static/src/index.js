@@ -104,7 +104,7 @@ window.onload = function() {
 				//console.log("ID jug: " + game.global.myPlayer.id)
 				//console.log("ID host: " + game.global.myRoom.hostId)
 				
-				game.global.myRoom.numJugadores = msg.numJugadores;
+				//game.global.myRoom.numJugadores = msg.numJugadores;
 				if(game.global.myPlayer.id == game.global.myRoom.idHost){
 					game.state.start('gameState');
 				} else{
