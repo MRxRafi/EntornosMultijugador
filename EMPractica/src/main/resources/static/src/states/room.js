@@ -1,6 +1,6 @@
 Spacewar.roomState = function(game) {
 	tick=0,
-	MAX_JUGADORES = 2
+	MAX_JUGADORES = 3
 }
 
 Spacewar.roomState.prototype = {
@@ -51,6 +51,7 @@ Spacewar.roomState.prototype = {
 		}
 		game.global.socket.send(JSON.stringify(message))
 		
+		console.log("Numero de jugadores " + game.global.myRoom.numJugadores)
 		numJugText.setText(game.global.myRoom.numJugadores + '/' + MAX_JUGADORES)
 		
 		if(game.global.myPlayer.id!==game.global.myRoom.idHost){

@@ -30,12 +30,20 @@
 
 <body>
 	<!-- div donde ubicaremos el juego -->
-	<div id="gameDiv"></div>
+	<div id="gameDiv">
+		<textarea id="chat" rows="19" cols=""  
+			style="position: absolute; left: 1032px; resize:none"></textarea>
+		<textarea id="chat" rows="19" cols="" 
+			style="position: absolute; left: 1032px; top: 300px; resize:none"></textarea>
+	</div>
 	<!-- div donde ubicaremos la entrada de texto -->
-	<div id="textBlock" style="width:1024px;height:100px;position:absolute;visibility:hidden">
-		<p id="p1" style="margin:8px;font-family:Chakra Petch;font-size:150%;"></p>
-		<input id="inputText" type="text" style="margin:8px;font-family:Chakra Petch;font-size:110%;border:2px solid black">
-		<input id="submitButton" type="submit" style="cursor:pointer">
+	<div id="textBlock"
+		style="width: 1024px; height: 120px; position: absolute; visibility: hidden">
+		<p id="p1"
+			style="margin: 8px; font-family: Chakra Petch; font-size: 150%;"></p>
+		<input id="inputText" type="text" maxlength="10"
+			style="margin: 8px; font-family: Chakra Petch; font-size: 110%; border: 2px solid black; width: 300px; padding:8px"/>
+		<input id="submitButton" type="submit" style="cursor: pointer; padding:8px" />
 	</div>
 </body>
 </html>
