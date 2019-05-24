@@ -101,19 +101,6 @@ Spacewar.gameState.prototype = {
 
 	update : function() {
 		if(typeof game.global.myPlayer != 'undefined'){
-			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
-			bulletsText.x=game.camera.x+10
-			bulletsText.y=game.camera.y+game.canvas.height-100
-
-			let msg = new Object()
-			msg.event = 'UPDATE MOVEMENT'
-
-			msg.movement = {
-				thrust : false,
-				brake : false,
-				rotLeft : false,
-				rotRight : false
-			}
 
 			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 			bulletsText.x=game.camera.x+10
