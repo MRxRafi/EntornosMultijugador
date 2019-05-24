@@ -20,9 +20,7 @@ Spacewar.lobbyState.prototype = {
 					"Mensaje:", "Enviar", 100);
 		inputChat.submitButton.onclick = function(){
 			if (inputChat.input.value !== "") {
-				//sendChatMessage(inputChat.input.value); // objects/functions.js
-				//¡¡¡¡¡PROVISIONAL!!!!!
-				document.getElementById("chat").value += "\n" + game.global.myPlayer.name + ": " + inputChat.input.value; 
+				sendChatMessage(inputChat.input.value); // objects/functions.js 
 			}
 		}
 		
