@@ -111,6 +111,21 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("partidas", getWaitRooms());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+					
+			case "UPDATE ACTIVE PLAYERS":
+				ArrayNode arrayNodePlayers = mapper.createArrayNode();
+				
+				for (Player p : game.lobby.getPlayers()) {
+					ObjectNode jsonPlayer = mapper.createObjectNode();
+					jsonPlayer.put("id", p.getPlayerId());
+					jsonPlayer.put("name", p.getName());
+					arrayNodePlayers.addPOJO(jsonPlayer);
+				}
+				
+				msg.put("event", "UPDATE ACTIVE PLAYERS");				
+				msg.putPOJO("players", arrayNodePlayers);
+				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				break;
 				
 			case "JOIN ROOM":
 				// Mandamos la room en la que hemos entrado de vuelta al cliente 
