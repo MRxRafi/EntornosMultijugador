@@ -225,10 +225,22 @@ window.onload = function() {
 				console.dir(msg.players)
 			}
 			if(msg.id == game.global.myPlayer.id){
+				//Borramos nuestra nave y la del resto y pasamos al menú o puntuaciones
 				game.global.myPlayer.image.destroy()
 				game.global.myInterface.myPlayerName.destroy()
 				game.global.myPlayer.healthBar.kill();
-				delete game.global.myPlayer
+				for(i = 0; i < game.global.otherPlayers.length; i++){
+					if(typeof game.global.otherPlayers[i] != 'undefined'){
+						game.global.otherPlayers[i].image.destroy()
+						game.global.myInterface.otherPlayers[i].name.destroy()
+						game.global.otherPlayers[i].healthBar.kill();
+						delete game.global.otherPlayers[i]
+					}
+				}
+				game.world.setBounds(0, 0, 1024, 600);
+				game.camera.position.x = 0
+				game.camera.position.y = 0
+				game.state.start("menuState"); //¿Puntuaciones?
 			} else {
 				game.global.otherPlayers[msg.id].image.destroy()
 				game.global.myInterface.otherPlayers[msg.id].name.destroy()

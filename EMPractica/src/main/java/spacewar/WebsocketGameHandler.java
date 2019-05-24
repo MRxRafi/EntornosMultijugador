@@ -80,7 +80,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 				
-				//Crear caso create room
+			case "JOIN LOBBY":
+				
+				break;
 			case "CREATE ROOM":
 				boolean aux=game.waitRooms.containsKey(node.path("sala").asText());
 				if(!aux) {
