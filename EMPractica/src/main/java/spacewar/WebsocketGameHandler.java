@@ -154,6 +154,16 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					player.getSession().sendMessage(new TextMessage(msg.toString()));
 				}
 				break;
+					
+			case "CHAT":
+				msg.put("event", "CHAT");
+				msg.put("playerName", node.path("playerName").asText());
+				msg.put("content", node.path("content").asText());
+				
+				for (Map.Entry<String, Player> entry : game.lobby.Jugadores.entrySet()) {
+				    entry.getValue().getSession().sendMessage(new TextMessage(msg.toString()));
+				}
+				break;
 				
 			case "START GAME":
 				msg.put("event", "NEW GAME");
