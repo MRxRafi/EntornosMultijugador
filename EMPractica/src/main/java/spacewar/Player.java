@@ -18,6 +18,7 @@ public class Player extends Spaceship {
 	private String name;
 	private String actualRoom;
 	private int bullets;
+	private int lifePoints;
 	
 	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
@@ -26,6 +27,7 @@ public class Player extends Spaceship {
 		this.shipType = this.getRandomShipType();
 		this.name = "";
 		this.bullets=100;
+		this.lifePoints = 10;
 	}
 
 	// METHODS
@@ -67,6 +69,14 @@ public class Player extends Spaceship {
 
 	public void setActualRoom(String actualRoom) {
 		this.actualRoom = actualRoom;
+	}
+
+	public int getLifePoints() {
+		return lifePoints;
+	}
+
+	public void setLifePoints(int lifePoints) {
+		this.lifePoints = lifePoints;
 	}
 
 	private String getRandomShipType() {

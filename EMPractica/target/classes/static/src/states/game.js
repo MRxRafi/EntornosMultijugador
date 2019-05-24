@@ -15,7 +15,7 @@ Spacewar.gameState = function(game) {
 	this.fireBullet
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
-	this.healthBar
+	game.global.myPlayer.healthBar
 }
 
 Spacewar.gameState.prototype = {
@@ -54,7 +54,7 @@ Spacewar.gameState.prototype = {
 		game.global.myPlayer.image = game.add.sprite(0, 0, 'spacewar',
 				game.global.myPlayer.shipType)
 		game.global.myPlayer.image.anchor.setTo(0.5, 0.5)
-		
+		game.global.myPlayer.lifePoints = 10;
 		
 		game.global.myInterface.myPlayerName = game.add.text(game.global.myPlayer.image.x,
 				game.global.myPlayer.image.y + game.global.myPlayer.image.height + 5,
@@ -62,10 +62,8 @@ Spacewar.gameState.prototype = {
 		
 		////// BARRA DE VIDA //////
         barConfig = {width: 50, height: 5, x: game.global.myPlayer.image.x, y: game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5,
-                     bg: {color: 'red'}, bar: {color: 'green'}};
-        healthBar = new HealthBar(game, barConfig);
-        //healthBar.setToGroup(grupo);
-        //healthBar.setFixedToCamera(true);
+                     bg: {color: 'red'}, bar: {color: 'green'}, animationDuration: 10 };
+        game.global.myPlayer.healthBar = new HealthBar(game, barConfig);
         ////// FIN BARRA DE VIDA //////
 	},
 
@@ -102,55 +100,69 @@ Spacewar.gameState.prototype = {
 	},
 
 	update : function() {
+		if(typeof game.global.myPlayer != 'undefined'){
+			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
+			bulletsText.x=game.camera.x+10
+			bulletsText.y=game.camera.y+game.canvas.height-100
 
-		bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
-		bulletsText.x=game.camera.x+10
-		bulletsText.y=game.camera.y+game.canvas.height-100
+			let msg = new Object()
+			msg.event = 'UPDATE MOVEMENT'
 
-		fuelText.setText(this.fuel+"/"+this.MAX_FUEL)
-		fuelText.x=game.camera.x+game.canvas.width-225
-		fuelText.y=game.camera.y+game.canvas.height-100
-
-		let msg = new Object()
-		msg.event = 'UPDATE MOVEMENT'
-
-		msg.movement = {
-			thrust : false,
-			brake : false,
-			rotLeft : false,
-			rotRight : false
-		}
-
-		msg.bullet = false
-
-		if(this.wKey.isDown){
-			if(this.fuel>0){
-				msg.movement.thrust = true;
-				this.fuel--
+			msg.movement = {
+				thrust : false,
+				brake : false,
+				rotLeft : false,
+				rotRight : false
 			}
-		}	
-		else{
-			if(this.fuel<this.MAX_FUEL){
-				this.fuel++
+
+			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
+			bulletsText.x=game.camera.x+10
+			bulletsText.y=game.camera.y+game.canvas.height-100
+
+			fuelText.setText(this.fuel+"/"+this.MAX_FUEL)
+			fuelText.x=game.camera.x+game.canvas.width-225
+			fuelText.y=game.camera.y+game.canvas.height-100
+
+			let msg = new Object()
+			msg.event = 'UPDATE MOVEMENT'
+
+			msg.movement = {
+				thrust : false,
+				brake : false,
+				rotLeft : false,
+				rotRight : false
 			}
-		}
-		if (this.sKey.isDown)
-			msg.movement.brake = true;
-		if (this.aKey.isDown)
-			msg.movement.rotLeft = true;
-		if (this.dKey.isDown)
-			msg.movement.rotRight = true;
-		if (this.spaceKey.isDown) {
-			msg.bullet = this.fireBullet()
-		}
 
-		console.log(this.fuel)
+			msg.bullet = false
 
-		healthBar.setPosition(game.global.myPlayer.image.x, game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5)
-		
-		if (game.global.DEBUG_MODE) {
-			//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
+			if(this.wKey.isDown){
+				if(this.fuel>0){
+					msg.movement.thrust = true;
+					this.fuel--
+				}
+			}	
+			else{
+				if(this.fuel<this.MAX_FUEL){
+					this.fuel++
+				}
+			}
+			if (this.sKey.isDown)
+				msg.movement.brake = true;
+			if (this.aKey.isDown)
+				msg.movement.rotLeft = true;
+			if (this.dKey.isDown)
+				msg.movement.rotRight = true;
+			if (this.spaceKey.isDown) {
+				msg.bullet = this.fireBullet()
+			}
+
+			if (game.global.DEBUG_MODE) {
+				//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
+			}
+			game.global.socket.send(JSON.stringify(msg))
+		} else {
+			//Puntuaciones o lobby.. ¿Habría que resetear algo?
+			//game.state.start("menuState")
 		}
-		game.global.socket.send(JSON.stringify(msg))
 	}
 }

@@ -15,6 +15,17 @@ Spacewar.lobbyState.prototype = {
 	},
 
 	create : function() {
+		showChat();
+		var inputChat = new inputText("rgb(0,130,130)", "white",
+					"Mensaje:", "Enviar", 100);
+		inputChat.submitButton.onclick = function(){
+			if (inputChat.input.value !== "") {
+				//sendChatMessage(inputChat.input.value); // objects/functions.js
+				//¡¡¡¡¡PROVISIONAL!!!!!
+				document.getElementById("chat").value += "\n" + game.global.myPlayer.name + ": " + inputChat.input.value; 
+			}
+		}
+		
 		var style = {
 			fill : "rgb(255,255,255)",
 			font : "60px Chakra Petch",
@@ -45,14 +56,14 @@ Spacewar.lobbyState.prototype = {
 
 			y += yOffset;
 		}
-		// game.state.start('matchmakingState')
 	},
-
+	
+	
 	crear : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			// Se crea una barra de texto
 			var inputRoom = new inputText("rgb(0,130,130)", "white",
-					"Introduzca el nombre de la sala:", "Aceptar");
+					"Introduzca el nombre de la sala:", "Aceptar", 15);
 			// Al pulsar el botón se asigna al nombre de la sala el valor
 			// escrito en la barra de texto. Si no hay nada escrito salta una alerta
 			inputRoom.submitButton.onclick = function() {
@@ -60,6 +71,7 @@ Spacewar.lobbyState.prototype = {
 					//HAY QUE COMPROBAR QUE EL NOMBRE NO ESTÉ YA ESCOGIDO
 					setRoomName(inputRoom.input.value); // objects/functions.js
 					inputRoom.hide();
+					hideChat();
 				} else {
 					alert("El nombre de la sala está vacío")
 				}
