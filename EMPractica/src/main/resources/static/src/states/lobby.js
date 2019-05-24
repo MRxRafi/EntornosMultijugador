@@ -56,6 +56,9 @@ Spacewar.lobbyState.prototype = {
 		}
 	},
 	
+	update : function(){
+		updateActivePlayers();
+	},
 	
 	crear : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
@@ -79,7 +82,7 @@ Spacewar.lobbyState.prototype = {
 
 	buscar : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-
+			hideChat();
 			let message = {
 				event : 'PARTIDAS'
 			}
