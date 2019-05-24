@@ -145,10 +145,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				break;
 				
 			case "UPDATE NUMJUG":
-				msg.put("event", "UPDATE NUMJUG");
-				msg.put("numJugadores", game.waitRooms.get(node.get("room").asText()).getNumJugadores());
-				
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				if(game.waitRooms.containsKey(node.get("room").asText())) {
+					msg.put("event", "UPDATE NUMJUG");
+					msg.put("numJugadores", game.waitRooms.get(node.get("room").asText()).getNumJugadores());
+					
+					player.getSession().sendMessage(new TextMessage(msg.toString()));
+				}
 				break;
 				
 			case "START GAME":

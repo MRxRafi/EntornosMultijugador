@@ -9,7 +9,7 @@ Spacewar.gameState = function(game) {
 	this.fireBullet
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
-	this.healthBar
+	game.global.myPlayer.healthBar
 }
 
 Spacewar.gameState.prototype = {
@@ -48,7 +48,7 @@ Spacewar.gameState.prototype = {
 		game.global.myPlayer.image = game.add.sprite(0, 0, 'spacewar',
 				game.global.myPlayer.shipType)
 		game.global.myPlayer.image.anchor.setTo(0.5, 0.5)
-		
+		game.global.myPlayer.lifePoints = 10;
 		
 		game.global.myInterface.myPlayerName = game.add.text(game.global.myPlayer.image.x,
 				game.global.myPlayer.image.y + game.global.myPlayer.image.height + 5,
@@ -56,10 +56,8 @@ Spacewar.gameState.prototype = {
 		
 		////// BARRA DE VIDA //////
         barConfig = {width: 50, height: 5, x: game.global.myPlayer.image.x, y: game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5,
-                     bg: {color: 'red'}, bar: {color: 'green'}};
-        healthBar = new HealthBar(game, barConfig);
-        //healthBar.setToGroup(grupo);
-        //healthBar.setFixedToCamera(true);
+                     bg: {color: 'red'}, bar: {color: 'green'}, animationDuration: 10 };
+        game.global.myPlayer.healthBar = new HealthBar(game, barConfig);
         ////// FIN BARRA DE VIDA //////
 	},
 
@@ -94,40 +92,43 @@ Spacewar.gameState.prototype = {
 	},
 
 	update : function() {
+		if(typeof game.global.myPlayer != 'undefined'){
+			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
+			bulletsText.x=game.camera.x+10
+			bulletsText.y=game.camera.y+game.canvas.height-100
 
-		bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
-		bulletsText.x=game.camera.x+10
-		bulletsText.y=game.camera.y+game.canvas.height-100
+			let msg = new Object()
+			msg.event = 'UPDATE MOVEMENT'
 
-		let msg = new Object()
-		msg.event = 'UPDATE MOVEMENT'
+			msg.movement = {
+				thrust : false,
+				brake : false,
+				rotLeft : false,
+				rotRight : false
+			}
 
-		msg.movement = {
-			thrust : false,
-			brake : false,
-			rotLeft : false,
-			rotRight : false
+			msg.bullet = false
+
+			if (this.wKey.isDown)
+				msg.movement.thrust = true;
+			if (this.sKey.isDown)
+				msg.movement.brake = true;
+			if (this.aKey.isDown)
+				msg.movement.rotLeft = true;
+			if (this.dKey.isDown)
+				msg.movement.rotRight = true;
+			if (this.spaceKey.isDown) {
+				msg.bullet = this.fireBullet()
+			}
+			
+			if (game.global.DEBUG_MODE) {
+				//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
+			}
+			game.global.socket.send(JSON.stringify(msg))
+		} else {
+			//Puntuaciones o lobby.. ¿Habría que resetear algo?
+			//game.state.start("menuState")
 		}
-
-		msg.bullet = false
-
-		if (this.wKey.isDown)
-			msg.movement.thrust = true;
-		if (this.sKey.isDown)
-			msg.movement.brake = true;
-		if (this.aKey.isDown)
-			msg.movement.rotLeft = true;
-		if (this.dKey.isDown)
-			msg.movement.rotRight = true;
-		if (this.spaceKey.isDown) {
-			msg.bullet = this.fireBullet()
-		}
-
-		healthBar.setPosition(game.global.myPlayer.image.x, game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5)
 		
-		if (game.global.DEBUG_MODE) {
-			//console.log("[DEBUG] Sending UPDATE MOVEMENT message to server")
-		}
-		game.global.socket.send(JSON.stringify(msg))
 	}
 }

@@ -14,7 +14,8 @@ window.onload = function() {
 		gameList : [],
 		validRoom: false,
 		projectiles : [],
-		idHost:-1
+		idHost:-1,
+		chat: []
 	}
 
 	game.global.myInterface.otherPlayers = []
@@ -71,6 +72,14 @@ window.onload = function() {
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ID assigned to player: ' + game.global.myPlayer.id)
 			}
+			break
+		case 'CHAT':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] CHAT message recieved')
+				console.dir(msg)
+			}
+			game.global.chat.push(msg.content);
+			document.getElementById("chat").value += "\n" + msg.content;
 			break
 		case 'CREATE ROOM':
 			if (game.global.DEBUG_MODE) {
@@ -133,27 +142,44 @@ window.onload = function() {
 				//console.log('[DEBUG] GAME STATE UPDATE message recieved')
 				//console.dir(msg)
 			}
+			
 			if (typeof game.global.myPlayer.image !== 'undefined') {
 				for (var player of msg.players) {
 					if (game.global.myPlayer.id == player.id) {
 						game.global.myPlayer.image.x = player.posX
 						game.global.myPlayer.image.y = player.posY
-						game.global.myPlayer.image.angle = player.facingAngle
+						game.global.myPlayer.image.angle = player.facingAngle  
+						game.global.myPlayer.healthBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height - 5)
+						game.global.myPlayer.healthBar.setPercent(player.lifePoints * 10)
 						
 						game.global.myInterface.myPlayerName.x = player.posX - game.global.myInterface.myPlayerName.width/2;
 						game.global.myInterface.myPlayerName.y = player.posY + game.global.myPlayer.image.height + 5;
 					} else {
 						if (typeof game.global.otherPlayers[player.id] == 'undefined') {
-							game.global.otherPlayers[player.id] = {
-									image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType)
+							if(player.lifePoints > 0){
+								game.global.otherPlayers[player.id] = {
+										image : game.add.sprite(player.posX, player.posY, 'spacewar', player.shipType),
+										lifePoints : player.lifePoints
+								}
+								game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
+								
+								// BARRA DE VIDA
+								barConfig = {width: 50, height: 5, x: game.global.myPlayer.image.x, 
+									y: game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5,
+									bg: {color: 'red'}, bar: {color: 'green'}, animationDuration: 10 };
+								game.global.otherPlayers[player.id].healthBar = new HealthBar(game, barConfig);
+								// FIN DE BARRA DE VIDA
 							}
-							game.global.otherPlayers[player.id].image.anchor.setTo(0.5, 0.5)
 							
 						} else {
 							game.global.otherPlayers[player.id].image.x = player.posX
 							game.global.otherPlayers[player.id].image.y = player.posY
 							game.global.otherPlayers[player.id].image.angle = player.facingAngle
-
+							game.global.otherPlayers[player.id].lifepoints = player.lifePoints
+							game.global.otherPlayers[player.id].healthBar.setPosition(player.posX,
+									player.posY - game.global.otherPlayers[player.id].image.height - 5)
+							game.global.otherPlayers[player.id].healthBar.setPercent(player.lifePoints * 10) //Puntos de vida de 0 a 10
+									
 							if(player.name !== null){
 								if(typeof game.global.myInterface.otherPlayers[player.id] === 'undefined'){
 									game.global.myInterface.otherPlayers[player.id] = {
@@ -198,9 +224,18 @@ window.onload = function() {
 				console.log('[DEBUG] REMOVE PLAYER message recieved')
 				console.dir(msg.players)
 			}
-			game.global.otherPlayers[msg.id].image.destroy()
-			game.global.myInterface.otherPlayers[msg.id].name.destroy()
-			delete game.global.otherPlayers[msg.id]
+			if(msg.id == game.global.myPlayer.id){
+				game.global.myPlayer.image.destroy()
+				game.global.myInterface.myPlayerName.destroy()
+				game.global.myPlayer.healthBar.kill();
+				delete game.global.myPlayer
+			} else {
+				game.global.otherPlayers[msg.id].image.destroy()
+				game.global.myInterface.otherPlayers[msg.id].name.destroy()
+				game.global.otherPlayers[msg.id].healthBar.kill();
+				delete game.global.otherPlayers[msg.id]
+			}
+			
 		default :
 			console.dir(msg)
 			break

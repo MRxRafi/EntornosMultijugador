@@ -94,22 +94,44 @@ public class BattleRoom extends GenericRoom {
 				jsonPlayer.put("posX", player.getPosX());
 				jsonPlayer.put("posY", player.getPosY());
 				jsonPlayer.put("facingAngle", player.getFacingAngle());
+				jsonPlayer.put("lifePoints", player.getLifePoints());
 				arrayNodePlayers.addPOJO(jsonPlayer);
 			}
 
+			// Handle collision and remove players when life <= 0
+			Set<String> removePlayers = new HashSet<String>();
+			for(Player player : getPlayers()) {
+				if(player.getLifePoints() <= 0) removePlayers.add(player.getSession().getId());
+			}
+			// Remove players that don't have life points
+			for(String idPlayer : removePlayers) {
+				Player delPlayer = Jugadores.get(idPlayer);
+				
+				ObjectNode msg = mapper.createObjectNode();
+				msg.put("event", "REMOVE PLAYER");
+				msg.put("id", delPlayer.getPlayerId());
+				
+				this.broadcast(msg.toString());
+				Jugadores.remove(idPlayer);
+				// ¿Add players into another room like rankRoom or lobby?
+				
+			}
+			
 			// Update bullets and handle collision
 			for (Projectile projectile : getProjectiles()) {
 				projectile.applyVelocity2Position();
 
-				// Handle collision
+				
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
+						player.setLifePoints(player.getLifePoints() - 1);
+						if(player.getLifePoints() <= 0) removePlayers.add(player.getSession().getId());
 						projectile.setHit(true);
 						break;
 					}
 				}
-
+				
 				ObjectNode jsonProjectile = mapper.createObjectNode();
 				jsonProjectile.put("id", projectile.getId());
 
