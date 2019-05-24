@@ -61,6 +61,18 @@ window.onload = function() {
 			game.global.gameList=lista;	
 			console.log(game.global.gameList)
 			break;
+		case 'UPDATE ACTIVE PLAYERS':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] ACTIVE PLAYERS message recieved');
+				console.dir(msg);
+			}
+			document.getElementById("players").value = "    👾JUGADORES👾 \n";
+			for (var player of msg.players){
+				if (game.global.myPlayer.id !== player.id && player.name !== undefined) {
+					document.getElementById("players").value += "\n[" + player.name + "]: En línea";
+				}
+			}
+			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] JOIN message recieved')
