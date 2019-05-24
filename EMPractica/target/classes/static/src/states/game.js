@@ -1,10 +1,16 @@
 Spacewar.gameState = function(game) {
-	style = {
+	style1 = {
 		fill : "rgb(255,255,255)",
 		font : "60px Chakra Petch",
-		boundsAlignH : "center"
-	},
+		boundsAlignH : "left",
+	}
+	style2 = {
+		fill : "rgb(255,255,255)",
+		font : "60px Chakra Petch",
+		boundsAlignH : "right",
+	}
 	this.MAX_BULLETS=100
+	this.MAX_FUEL=50
 	this.bulletTime
 	this.fireBullet
 	this.numStars = 100 // Should be canvas size dependant
@@ -64,7 +70,8 @@ Spacewar.gameState.prototype = {
 	},
 
 	create : function() {
-		game.global.myPlayer.numBullets=100
+		game.global.myPlayer.numBullets=this.MAX_BULLETS
+		this.fuel=this.MAX_FUEL
 		this.bulletTime = 0
 		this.fireBullet = function() {
 			if (game.time.now > this.bulletTime && game.global.myPlayer.numBullets>0) {
@@ -77,7 +84,8 @@ Spacewar.gameState.prototype = {
 			}
 		}
 
-		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
+		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style1)
+		fuelText=game.add.text(game.camera.x+game.canvas.width-250,game.camera.y+game.canvas.height-100,this.fuel+"/"+this.MAX_FUEL,style2)
 
 		this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -99,6 +107,10 @@ Spacewar.gameState.prototype = {
 		bulletsText.x=game.camera.x+10
 		bulletsText.y=game.camera.y+game.canvas.height-100
 
+		fuelText.setText(this.fuel+"/"+this.MAX_FUEL)
+		fuelText.x=game.camera.x+game.canvas.width-225
+		fuelText.y=game.camera.y+game.canvas.height-100
+
 		let msg = new Object()
 		msg.event = 'UPDATE MOVEMENT'
 
@@ -111,8 +123,17 @@ Spacewar.gameState.prototype = {
 
 		msg.bullet = false
 
-		if (this.wKey.isDown)
-			msg.movement.thrust = true;
+		if(this.wKey.isDown){
+			if(this.fuel>0){
+				msg.movement.thrust = true;
+				this.fuel--
+			}
+		}	
+		else{
+			if(this.fuel<this.MAX_FUEL){
+				this.fuel++
+			}
+		}
 		if (this.sKey.isDown)
 			msg.movement.brake = true;
 		if (this.aKey.isDown)
@@ -122,6 +143,8 @@ Spacewar.gameState.prototype = {
 		if (this.spaceKey.isDown) {
 			msg.bullet = this.fireBullet()
 		}
+
+		console.log(this.fuel)
 
 		healthBar.setPosition(game.global.myPlayer.image.x, game.global.myPlayer.image.y - game.global.myPlayer.image.height - 5)
 		
