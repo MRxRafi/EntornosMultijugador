@@ -95,6 +95,7 @@ public class BattleRoom extends GenericRoom {
 				jsonPlayer.put("posY", player.getPosY());
 				jsonPlayer.put("facingAngle", player.getFacingAngle());
 				jsonPlayer.put("lifePoints", player.getLifePoints());
+				jsonPlayer.put("score", player.getScore());
 				arrayNodePlayers.addPOJO(jsonPlayer);
 			}
 
@@ -132,11 +133,11 @@ public class BattleRoom extends GenericRoom {
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
-						//projectile.getOwner().setScore(projectile.getOwner().getScore() + 10);
+						projectile.getOwner().setScore(projectile.getOwner().getScore() + 10);
 						player.setLifePoints(player.getLifePoints() - 1);
 						if(player.getLifePoints() <= 0){
 							removePlayers.add(player.getSession().getId());
-							//projectile.getOwner().setScore(projectile.getOwner().getScore() + 100);
+							projectile.getOwner().setScore(projectile.getOwner().getScore() + 100);
 						}
 						projectile.setHit(true);
 						break;
