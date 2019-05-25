@@ -83,6 +83,7 @@ public class BattleRoom extends GenericRoom {
 		boolean removeBullets = false;
 
 		try {
+			if(this.getNumJugadores() == 0) stopTask();
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();

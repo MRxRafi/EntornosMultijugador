@@ -198,6 +198,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						//Ponemos la vida a 10
 						for(String key : mp.keySet()) {
 							mp.get(key).setLifePoints(10);
+							mp.get(key).setScore(0);
 						}
 						//System.out.println(mp.keySet().size());
 						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
