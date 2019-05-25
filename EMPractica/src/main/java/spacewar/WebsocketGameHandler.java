@@ -216,6 +216,18 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+					
+			case "SEND SCORE":
+				String playerName = node.path("playerName").asText();
+				int score = node.path("score").asInt();
+				if (game.globalScores.containsKey(playerName)) {
+					int previusScore = game.globalScores.get(playerName);
+					game.globalScores.replace(playerName, previusScore + score);
+				}
+				else {
+					game.globalScores.put(playerName, score);
+				}
+				break;
 				
 			default:
 				break;
