@@ -101,6 +101,9 @@ Spacewar.gameState.prototype = {
 
 	update : function() {
 		if(typeof game.global.myPlayer != 'undefined'){
+			if(game.global.otherPlayers.length==0){
+				
+			}
 
 			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 			bulletsText.x=game.camera.x+10

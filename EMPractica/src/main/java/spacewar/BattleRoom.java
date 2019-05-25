@@ -86,7 +86,7 @@ public class BattleRoom extends GenericRoom {
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
-
+				
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("name", player.getName());
@@ -100,6 +100,12 @@ public class BattleRoom extends GenericRoom {
 
 			// Handle collision and remove players when life <= 0
 			Set<String> removePlayers = new HashSet<String>();
+			System.out.println(getNumJugadores());
+			if(getNumJugadores()==1) {
+				for(Player player : getPlayers()) {
+					removePlayers.add(player.getSession().getId());
+				}
+			}
 			for(Player player : getPlayers()) {
 				if(player.getLifePoints() <= 0) removePlayers.add(player.getSession().getId());
 			}
@@ -110,6 +116,7 @@ public class BattleRoom extends GenericRoom {
 				ObjectNode msg = mapper.createObjectNode();
 				msg.put("event", "REMOVE PLAYER");
 				msg.put("id", delPlayer.getPlayerId());
+				numPlayers.decrementAndGet();
 				
 				this.broadcast(msg.toString());
 				Jugadores.remove(idPlayer);
