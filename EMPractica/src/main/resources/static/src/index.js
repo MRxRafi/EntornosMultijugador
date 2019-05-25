@@ -239,6 +239,12 @@ window.onload = function() {
 				game.global.myPlayer.image.destroy()
 				game.global.myInterface.myPlayerName.destroy()
 				game.global.myPlayer.healthBar.kill();
+				game.global.validRoom = false
+				game.global.idHost = -1
+				delete game.global.myPlayer.room
+				game.global.myRoom = new Object();
+				
+				
 				for(i = 0; i < game.global.otherPlayers.length; i++){
 					if(typeof game.global.otherPlayers[i] != 'undefined'){
 						game.global.otherPlayers[i].image.destroy()

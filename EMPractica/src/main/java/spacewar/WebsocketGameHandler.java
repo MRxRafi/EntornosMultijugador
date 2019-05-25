@@ -10,6 +10,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /* COMENTARIOS
@@ -91,8 +92,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				} else {
 					aux = false;
 				}
-				System.out.println(player.getPlayerId());
-				System.out.println(game.waitRooms.get(node.path("sala").asText()).getIdHost());
+
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
@@ -137,10 +137,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("room", sala_destino);
 				msg.put("idHost", game.waitRooms.get(sala_destino).getIdHost());
 				
-				ObjectNode delete_msg = mapper.createObjectNode();
-				delete_msg.put("event", "REMOVE PLAYER");
-				delete_msg.put("id", player.getPlayerId());
-				game.deletePlayerFromRoom(sala_actual, player, delete_msg);
+				if(sala_actual != "lobby") {
+					ObjectNode delete_msg = mapper.createObjectNode();
+					delete_msg.put("event", "REMOVE PLAYER");
+					delete_msg.put("id", player.getPlayerId());
+					game.deletePlayerFromRoom(sala_actual, player, delete_msg);
+				}
 				
 				// Si hemos pasado de una room a una battleroom hay que ver que hacemos..
 				game.addPlayerToRoom(sala_destino, player);
@@ -193,6 +195,10 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						//Si contiene la room, creamos una battleRoom y mandamos mensaje al cliente
 						game.waitRooms.get(room).setEmpezar(true);
 						Map<String, Player> mp = game.waitRooms.get(room).Jugadores;
+						//Ponemos la vida a 10
+						for(String key : mp.keySet()) {
+							mp.get(key).setLifePoints(10);
+						}
 						//System.out.println(mp.keySet().size());
 						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
 						game.battleRooms.get(room).startGameLoop();
@@ -232,6 +238,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("id", player.getPlayerId());
 		
 		game.deletePlayerFromRoom(sala_actual, player, msg);
+		if(sala_actual != "lobby") {
+			game.deletePlayerFromRoom("lobby", player, msg);
+		}
 		
 	}
 }

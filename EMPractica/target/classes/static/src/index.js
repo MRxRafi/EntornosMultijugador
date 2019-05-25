@@ -15,7 +15,6 @@ window.onload = function() {
 		validRoom: false,
 		projectiles : [],
 		idHost:-1,
-		chat: []
 	}
 
 	game.global.myInterface.otherPlayers = []
@@ -62,6 +61,18 @@ window.onload = function() {
 			game.global.gameList=lista;	
 			console.log(game.global.gameList)
 			break;
+		case 'UPDATE ACTIVE PLAYERS':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] ACTIVE PLAYERS message recieved');
+				console.dir(msg);
+			}
+			document.getElementById("players").value = "    👾JUGADORES👾 \n";
+			for (var player of msg.players){
+				if (game.global.myPlayer.id !== player.id && player.name !== undefined) {
+					document.getElementById("players").value += "\n[" + player.name + "]: En línea";
+				}
+			}
+			break;
 		case 'JOIN':
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] JOIN message recieved')
@@ -78,8 +89,7 @@ window.onload = function() {
 				console.log('[DEBUG] CHAT message recieved')
 				console.dir(msg)
 			}
-			game.global.chat.push(msg.content);
-			document.getElementById("chat").value += "\n" + msg.content;
+			document.getElementById("chat").value += "\n" + msg.playerName + ": " + msg.content;
 			break
 		case 'CREATE ROOM':
 			if (game.global.DEBUG_MODE) {
@@ -229,6 +239,12 @@ window.onload = function() {
 				game.global.myPlayer.image.destroy()
 				game.global.myInterface.myPlayerName.destroy()
 				game.global.myPlayer.healthBar.kill();
+				game.global.validRoom = false
+				game.global.idHost = -1
+				delete game.global.myPlayer.room
+				game.global.myRoom = new Object();
+				
+				
 				for(i = 0; i < game.global.otherPlayers.length; i++){
 					if(typeof game.global.otherPlayers[i] != 'undefined'){
 						game.global.otherPlayers[i].image.destroy()

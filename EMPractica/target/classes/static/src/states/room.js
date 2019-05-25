@@ -1,6 +1,6 @@
 Spacewar.roomState = function(game) {
 	tick=0,
-	MAX_JUGADORES = 3
+	MAX_JUGADORES = 5
 }
 
 Spacewar.roomState.prototype = {

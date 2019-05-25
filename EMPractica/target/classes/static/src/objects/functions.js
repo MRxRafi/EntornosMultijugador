@@ -24,3 +24,10 @@ function sendChatMessage(string){
 	}
 	game.global.socket.send(JSON.stringify(message))
 }
+
+function updateActivePlayers(){
+	let message = {
+			event: "UPDATE ACTIVE PLAYERS"
+	}
+	game.global.socket.send(JSON.stringify(message))
+}

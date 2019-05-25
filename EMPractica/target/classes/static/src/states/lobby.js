@@ -20,9 +20,7 @@ Spacewar.lobbyState.prototype = {
 					"Mensaje:", "Enviar", 100);
 		inputChat.submitButton.onclick = function(){
 			if (inputChat.input.value !== "") {
-				//sendChatMessage(inputChat.input.value); // objects/functions.js
-				//¡¡¡¡¡PROVISIONAL!!!!!
-				document.getElementById("chat").value += "\n" + game.global.myPlayer.name + ": " + inputChat.input.value; 
+				sendChatMessage(inputChat.input.value); // objects/functions.js 
 			}
 		}
 		
@@ -58,6 +56,9 @@ Spacewar.lobbyState.prototype = {
 		}
 	},
 	
+	update : function(){
+		updateActivePlayers();
+	},
 	
 	crear : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
@@ -81,7 +82,7 @@ Spacewar.lobbyState.prototype = {
 
 	buscar : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
-
+			hideChat();
 			let message = {
 				event : 'PARTIDAS'
 			}

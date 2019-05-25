@@ -31,6 +31,11 @@ Spacewar.selectRoomState.prototype = {
 		    verticalWheel: true,
 		    deltaWheel: 40
 		});
+		
+		index=0,
+		tick=0
+		gameText=[]
+		room='undefined'
 	},
 
 	preload : function() {
