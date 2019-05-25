@@ -33,6 +33,9 @@ public class SpacewarGame {
 	// GLOBAL GAME ROOM --> lobby
 	public GenericRoom lobby = new GenericRoom();
 	
+	// GLOBAL SCORES
+	public Map<String, Integer> globalScores = new ConcurrentHashMap<>();
+	
 	// ROOMS
 	public Map<String, WaitRoom> waitRooms = new ConcurrentHashMap<>();
 	

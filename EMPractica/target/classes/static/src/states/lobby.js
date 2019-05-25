@@ -71,7 +71,7 @@ Spacewar.lobbyState.prototype = {
 				if (inputRoom.input.value !== "") {
 					//HAY QUE COMPROBAR QUE EL NOMBRE NO ESTÉ YA ESCOGIDO
 					setRoomName(inputRoom.input.value); // objects/functions.js
-					inputRoom.hide();
+					//inputRoom.hide();
 					hideChat();
 				} else {
 					alert("El nombre de la sala está vacío")
@@ -83,7 +83,11 @@ Spacewar.lobbyState.prototype = {
 	buscar : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			hideChat();
+<<<<<<< HEAD
 			inputChat.hide();
+=======
+			//inputChat.hide();
+>>>>>>> e4adca6b2a319708193e4dcc5973afa447f94be8
 			let message = {
 				event : 'PARTIDAS'
 			}

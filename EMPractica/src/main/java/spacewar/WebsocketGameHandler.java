@@ -201,6 +201,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						}
 						//System.out.println(mp.keySet().size());
 						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
+						int nJ=game.waitRooms.get(room).getNumJugadores();
+						game.battleRooms.get(room).numPlayers.set(nJ);
 						game.battleRooms.get(room).startGameLoop();
 						
 						game.waitRooms.remove(room);
@@ -216,6 +218,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
+					
 				
 			default:
 				break;

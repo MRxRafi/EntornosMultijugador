@@ -44,6 +44,7 @@ Spacewar.selectRoomState.prototype = {
 	},
 
 	create : function() {
+		y=20
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Entering **SELECTROOM** state CREATE");
 		}  
@@ -89,6 +90,7 @@ Spacewar.selectRoomState.prototype = {
 				game.global.socket.send(JSON.stringify(message))
 			}
 			tick=0
+			console.log(game.global.gameList.length)
 		}
 		var auxIndex=index;
 		

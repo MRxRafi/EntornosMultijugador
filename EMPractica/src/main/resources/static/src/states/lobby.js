@@ -1,5 +1,5 @@
 Spacewar.lobbyState = function(game) {
-
+	var inputChat
 }
 
 Spacewar.lobbyState.prototype = {
@@ -16,7 +16,7 @@ Spacewar.lobbyState.prototype = {
 
 	create : function() {
 		showChat();
-		var inputChat = new inputText("rgb(0,130,130)", "white",
+		inputChat = new inputText("rgb(0,130,130)", "white",
 					"Mensaje:", "Enviar", 100);
 		inputChat.submitButton.onclick = function(){
 			if (inputChat.input.value !== "") {
@@ -71,7 +71,7 @@ Spacewar.lobbyState.prototype = {
 				if (inputRoom.input.value !== "") {
 					//HAY QUE COMPROBAR QUE EL NOMBRE NO ESTÉ YA ESCOGIDO
 					setRoomName(inputRoom.input.value); // objects/functions.js
-					inputRoom.hide();
+					//inputRoom.hide();
 					hideChat();
 				} else {
 					alert("El nombre de la sala está vacío")
