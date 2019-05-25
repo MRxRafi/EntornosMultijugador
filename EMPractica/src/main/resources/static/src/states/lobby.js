@@ -60,7 +60,7 @@ Spacewar.lobbyState.prototype = {
 		updateActivePlayers();
 	},
 	
-	crear : function() {
+	crear : function() {		
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			// Se crea una barra de texto
 			var inputRoom = new inputText("rgb(0,130,130)", "white",
@@ -83,6 +83,7 @@ Spacewar.lobbyState.prototype = {
 	buscar : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			hideChat();
+			inputChat.hide();
 			let message = {
 				event : 'PARTIDAS'
 			}
