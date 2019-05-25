@@ -32,8 +32,9 @@ Spacewar.selectRoomState.prototype = {
 		    deltaWheel: 40
 		});
 		
-		index=0,
+		index=0
 		tick=0
+		y=20
 		gameText=[]
 		room='undefined'
 	},
@@ -74,7 +75,7 @@ Spacewar.selectRoomState.prototype = {
 			y+= yOffset;
 			
 		}
-		game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
+		//game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
 		console.log(gameText)
 	},
 

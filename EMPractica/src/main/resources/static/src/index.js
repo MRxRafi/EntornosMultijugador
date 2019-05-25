@@ -241,6 +241,7 @@ window.onload = function() {
 				game.global.myPlayer.healthBar.kill();
 				game.global.validRoom = false
 				game.global.idHost = -1
+				game.global.gameList = []
 				delete game.global.myPlayer.room
 				game.global.myRoom = new Object();
 				
@@ -250,8 +251,17 @@ window.onload = function() {
 						game.global.otherPlayers[i].image.destroy()
 						game.global.myInterface.otherPlayers[i].name.destroy()
 						game.global.otherPlayers[i].healthBar.kill();
+						
+						delete game.global.myInterface.otherPlayers[i]
 						delete game.global.otherPlayers[i]
+						
 					}
+					
+					var arrayN = []
+					var arrayN2 = []
+					game.global.otherPlayers = arrayN
+					game.global.myInterface.otherPlayers = arrayN2
+					
 				}
 				game.world.setBounds(0, 0, 1024, 600);
 				game.camera.position.x = 0
