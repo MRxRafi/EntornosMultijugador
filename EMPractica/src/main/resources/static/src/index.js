@@ -266,7 +266,7 @@ window.onload = function() {
 				game.world.setBounds(0, 0, 1024, 600);
 				game.camera.position.x = 0
 				game.camera.position.y = 0
-				game.state.start("menuState"); //¿Puntuaciones?
+				game.state.start("scoreState"); 
 			} else {
 				game.global.otherPlayers[msg.id].image.destroy()
 				game.global.myInterface.otherPlayers[msg.id].name.destroy()
