@@ -31,3 +31,20 @@ function updateActivePlayers(){
 	}
 	game.global.socket.send(JSON.stringify(message))
 }
+
+function updateNumPlayers(){
+	let message = {
+			event : 'UPDATE NUMJUG',
+			room : game.global.myPlayer.room
+		}
+		game.global.socket.send(JSON.stringify(message))
+}
+
+function sendScore(){
+	let message = {
+			event : 'SEND SCORE',
+			playerName : game.global.myPlayer.name
+			score : game.global.myPlayer.score
+	}
+	game.global.socket.send(JSON.stringify(message))
+}
