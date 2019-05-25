@@ -125,8 +125,12 @@ public class BattleRoom extends GenericRoom {
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
 						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
+						projectile.getOwner().setScore(projectile.getOwner().getScore() + 10);
 						player.setLifePoints(player.getLifePoints() - 1);
-						if(player.getLifePoints() <= 0) removePlayers.add(player.getSession().getId());
+						if(player.getLifePoints() <= 0){
+							removePlayers.add(player.getSession().getId());
+							projectile.getOwner().setScore(projectile.getOwner().getScore() + 100);
+						}
 						projectile.setHit(true);
 						break;
 					}
