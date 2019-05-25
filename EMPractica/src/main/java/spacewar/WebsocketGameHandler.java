@@ -81,18 +81,17 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 				
-			case "JOIN LOBBY":
-				
-				break;
 			case "CREATE ROOM":
-				boolean aux=game.waitRooms.containsKey(node.path("sala").asText());
-				if(!aux) {
-					game.waitRooms.put(node.path("sala").asText(), new WaitRoom(node.path("sala").asText(),player));
-					aux = true;
-				} else {
-					aux = false;
+				boolean aux = true;
+				synchronized(game) {
+					aux=game.waitRooms.containsKey(node.path("sala").asText());
+					if(!aux) {
+						game.waitRooms.put(node.path("sala").asText(), new WaitRoom(node.path("sala").asText(),player));
+						aux = true;
+					} else {
+						aux = false;
+					}
 				}
-
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
