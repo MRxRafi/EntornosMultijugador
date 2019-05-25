@@ -65,6 +65,9 @@ Spacewar.gameState.prototype = {
                      bg: {color: 'red'}, bar: {color: 'green'}, animationDuration: 10 };
         game.global.myPlayer.healthBar = new HealthBar(game, barConfig);
         ////// FIN BARRA DE VIDA //////
+        
+        game.global.otherPlayers = new Array()
+        game.global.myInterface.otherPlayers = new Array()
 	},
 
 	create : function() {
