@@ -95,7 +95,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
-				player.setActualRoom(node.path("sala").asText());
+				if(aux) player.setActualRoom(node.path("sala").asText());
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 				
@@ -235,12 +235,13 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
 		String sala_actual = player.getActualRoom();
-		
 		ObjectNode msg = mapper.createObjectNode();
+
 		msg.put("event", "REMOVE PLAYER");
 		msg.put("id", player.getPlayerId());
 		
 		game.deletePlayerFromRoom(sala_actual, player, msg);
+		
 		if(sala_actual != "lobby") {
 			game.deletePlayerFromRoom("lobby", player, msg);
 		}
