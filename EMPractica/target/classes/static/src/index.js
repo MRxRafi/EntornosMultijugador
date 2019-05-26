@@ -161,7 +161,7 @@ window.onload = function() {
 						game.global.myPlayer.image.angle = player.facingAngle  
 						game.global.myPlayer.healthBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height - 5)
 						game.global.myPlayer.healthBar.setPercent(player.lifePoints * 10)
-						
+						game.global.myPlayer.score = player.score;
 						game.global.myInterface.myPlayerName.x = player.posX - game.global.myInterface.myPlayerName.width/2;
 						game.global.myInterface.myPlayerName.y = player.posY + game.global.myPlayer.image.height + 5;
 					} else {
@@ -266,7 +266,7 @@ window.onload = function() {
 				game.world.setBounds(0, 0, 1024, 600);
 				game.camera.position.x = 0
 				game.camera.position.y = 0
-				game.state.start("menuState"); //¿Puntuaciones?
+				game.state.start("scoreState"); 
 			} else {
 				game.global.otherPlayers[msg.id].image.destroy()
 				game.global.myInterface.otherPlayers[msg.id].name.destroy()
@@ -289,7 +289,8 @@ window.onload = function() {
 	game.state.add('roomState', Spacewar.roomState)
 	game.state.add('gameState', Spacewar.gameState)
 	game.state.add('selectRoomState', Spacewar.selectRoomState)
-
+	game.state.add('scoreState', Spacewar.scoreState)
+	
 	game.state.start('bootState')
 
 }

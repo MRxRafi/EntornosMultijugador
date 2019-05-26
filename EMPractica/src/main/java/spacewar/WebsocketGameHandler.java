@@ -81,18 +81,17 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 				
-			case "JOIN LOBBY":
-				
-				break;
 			case "CREATE ROOM":
-				boolean aux=game.waitRooms.containsKey(node.path("sala").asText());
-				if(!aux) {
-					game.waitRooms.put(node.path("sala").asText(), new WaitRoom(node.path("sala").asText(),player));
-					aux = true;
-				} else {
-					aux = false;
+				boolean aux = true;
+				synchronized(game) {
+					aux=game.waitRooms.containsKey(node.path("sala").asText());
+					if(!aux) {
+						game.waitRooms.put(node.path("sala").asText(), new WaitRoom(node.path("sala").asText(),player));
+						aux = true;
+					} else {
+						aux = false;
+					}
 				}
-
 				msg.put("event","CREATE ROOM");
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
@@ -198,6 +197,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 						//Ponemos la vida a 10
 						for(String key : mp.keySet()) {
 							mp.get(key).setLifePoints(10);
+							mp.get(key).setScore(0);
 						}
 						//System.out.println(mp.keySet().size());
 						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
@@ -219,17 +219,6 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.getSession().sendMessage(new TextMessage(msg.toString()));
 				break;
 					
-			case "SEND SCORE":
-				String playerName = node.path("playerName").asText();
-				int score = node.path("score").asInt();
-				if (game.globalScores.containsKey(playerName)) {
-					int previusScore = game.globalScores.get(playerName);
-					game.globalScores.replace(playerName, previusScore + score);
-				}
-				else {
-					game.globalScores.put(playerName, score);
-				}
-				break;
 				
 			default:
 				break;

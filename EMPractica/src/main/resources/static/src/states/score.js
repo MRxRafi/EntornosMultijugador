@@ -1,20 +1,8 @@
 Spacewar.scoreState = function(game) {
-	// Estilos de texto
-	var titleStyle = {
-		fill : "rgb(255,255,255)",
-		font : "100px Chakra Petch",
-		boundsAlignH : "center"
-	};
-	var style = {
-		fill : "rgb(255,255,255)",
-		font : "60px Chakra Petch",
-		boundsAlignH : "center"
-	};
-	var y = game.canvas.height / 3;
-	var yOffset = 80;
+	
 }
 
-Spacewar.menuState.prototype = {
+Spacewar.scoreState.prototype = {
 
 	init : function() {
 		if (game.global.DEBUG_MODE) {
@@ -27,6 +15,19 @@ Spacewar.menuState.prototype = {
 	},
 
 	create : function() {
+		// Estilos de texto
+		var titleStyle = {
+			fill : "rgb(255,255,255)",
+			font : "100px Chakra Petch",
+			boundsAlignH : "center"
+		};
+		var style = {
+			fill : "rgb(255,255,255)",
+			font : "60px Chakra Petch",
+			boundsAlignH : "center"
+		};
+		var y = game.canvas.height / 3;
+		var yOffset = 80;
 		
 		// Crea el texto del Título
 		var titleText = game.add.text(0, 0, "PUNTUACIÓN", titleStyle);
@@ -35,7 +36,7 @@ Spacewar.menuState.prototype = {
 		var scoreText = game.add.text(0, y, game.global.myPlayer.score, style);
 		scoreText.setTextBounds(0, 0, game.world.width, game.world.height);
 		//Botón para volver atrás
-		var returnText = game.add.text(0, y + yOffset, menuOptions[i], style);
+		var returnText = game.add.text(0, y + yOffset, "Volver", style);
 		returnText.setTextBounds(0, 0, game.world.width, game.world.height);
 		
 		returnText.inputEnabled = true;
@@ -46,7 +47,6 @@ Spacewar.menuState.prototype = {
 	},
 
 	volver : function() {
-		sendScore();
 		game.state.start("menuState");
 	}
 

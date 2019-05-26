@@ -39,12 +39,3 @@ function updateNumPlayers(){
 		}
 		game.global.socket.send(JSON.stringify(message))
 }
-
-function sendScore(){
-	let message = {
-			event : 'SEND SCORE',
-			playerName : game.global.myPlayer.name
-			score : game.global.myPlayer.score
-	}
-	game.global.socket.send(JSON.stringify(message))
-}

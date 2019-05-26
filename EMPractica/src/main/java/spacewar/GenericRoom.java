@@ -18,6 +18,7 @@ public class GenericRoom {
 	public GenericRoom(String nombre, Player player) {
 		Jugadores.put(player.getSession().getId(), player);
 		numPlayers.incrementAndGet();
+
 		this.nombre=nombre;
 	}
 	
