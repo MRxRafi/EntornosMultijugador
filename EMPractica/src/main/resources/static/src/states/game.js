@@ -86,8 +86,8 @@ Spacewar.gameState.prototype = {
 			}
 		}
 
-		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style1)
-		fuelText=game.add.text(game.camera.x+game.canvas.width-250,game.camera.y+game.canvas.height-100,this.fuel+"/"+this.MAX_FUEL,style2)
+		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style1)
+		fuelText=game.add.text(game.camera.x+game.canvas.width-265,game.camera.y+game.canvas.height-100,"⛽ "+this.fuel+"/"+this.MAX_FUEL,style2)
 
 		this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -109,12 +109,12 @@ Spacewar.gameState.prototype = {
 				
 			}
 
-			bulletsText.setText(game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
+			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 			bulletsText.x=game.camera.x+10
 			bulletsText.y=game.camera.y+game.canvas.height-100
 
-			fuelText.setText(this.fuel+"/"+this.MAX_FUEL)
-			fuelText.x=game.camera.x+game.canvas.width-225
+			fuelText.setText("⛽ "+this.fuel+"/"+this.MAX_FUEL)
+			fuelText.x=game.camera.x+game.canvas.width-265
 			fuelText.y=game.camera.y+game.canvas.height-100
 
 			let msg = new Object()

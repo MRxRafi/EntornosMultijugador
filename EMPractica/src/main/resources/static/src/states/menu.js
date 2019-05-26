@@ -25,9 +25,10 @@ Spacewar.menuState.prototype = {
 
 	create : function() {
 		// Se crea una barra de texto
-		var inputName = new inputText("rgb(0,130,130)", "white",
+		if(!game.global.myPlayer.name){
+			var inputName = new inputText("rgb(0,130,130)", "white",
 				"Introduzca su nombre de usuario:", "Aceptar", 15);
-		// Al pulsar el botón se asigna al nombre del jugador el valor escrito
+				// Al pulsar el botón se asigna al nombre del jugador el valor escrito
 		// en la barra de texto. Si no hay nada escrito salta una alerta
 		inputName.submitButton.onclick = function() {
 			if (inputName.input.value !== "") {
@@ -36,6 +37,9 @@ Spacewar.menuState.prototype = {
 			} else {
 				alert("El nombre de usuario está vacío")
 			}
+		}
+		
+		
 		};
 
 		// Estilos de texto
