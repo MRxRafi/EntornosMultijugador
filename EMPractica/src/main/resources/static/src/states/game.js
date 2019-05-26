@@ -1,13 +1,8 @@
 Spacewar.gameState = function(game) {
-	style1 = {
+	style = {
 		fill : "rgb(255,255,255)",
 		font : "60px Chakra Petch",
 		boundsAlignH : "left",
-	}
-	style2 = {
-		fill : "rgb(255,255,255)",
-		font : "60px Chakra Petch",
-		boundsAlignH : "right",
 	}
 	this.MAX_BULLETS=100
 	this.MAX_FUEL=50
@@ -86,8 +81,10 @@ Spacewar.gameState.prototype = {
 			}
 		}
 
-		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height-100,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style1)
-		fuelText=game.add.text(game.camera.x+game.canvas.width-265,game.camera.y+game.canvas.height-100,"⛽ "+this.fuel+"/"+this.MAX_FUEL,style2)
+		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
+		bulletsText.anchor.setTo(0,1);
+		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,"⛽ "+this.fuel+"/"+this.MAX_FUEL,style)
+		fuelText.anchor.setTo(1,1);
 
 		this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
@@ -111,11 +108,11 @@ Spacewar.gameState.prototype = {
 
 			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 			bulletsText.x=game.camera.x+10
-			bulletsText.y=game.camera.y+game.canvas.height-100
+			bulletsText.y=game.camera.y+game.canvas.height
 
 			fuelText.setText("⛽ "+this.fuel+"/"+this.MAX_FUEL)
-			fuelText.x=game.camera.x+game.canvas.width-265
-			fuelText.y=game.camera.y+game.canvas.height-100
+			fuelText.x=game.camera.x+game.canvas.width-10
+			fuelText.y=game.camera.y+game.canvas.height
 
 			let msg = new Object()
 			msg.event = 'UPDATE MOVEMENT'
