@@ -63,8 +63,8 @@ Spacewar.lobbyState.prototype = {
 	crear : function() {		
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			// Se crea una barra de texto
-			var inputRoom = new inputText("rgb(0,130,130)", "white",
-					"Introduzca el nombre de la sala:", "Aceptar", 15);
+			inputRoom = new inputText("rgb(0,130,130)", "white",
+			"Introduzca el nombre de la sala:", "Aceptar", 15);
 			// Al pulsar el botón se asigna al nombre de la sala el valor
 			// escrito en la barra de texto. Si no hay nada escrito salta una alerta
 			inputRoom.submitButton.onclick = function() {
@@ -84,6 +84,7 @@ Spacewar.lobbyState.prototype = {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			hideChat();
 			inputChat.hide();
+			inputRoom.hide();
 			let message = {
 				event : 'PARTIDAS'
 			}
