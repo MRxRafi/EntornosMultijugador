@@ -1,6 +1,8 @@
 package spacewar;
 
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.socket.CloseStatus;
@@ -24,16 +26,20 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	// VARIABLES AND FIXED VALUES
 	private SpacewarGame game = SpacewarGame.INSTANCE;
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
+	private final int NUM_HILOS = 10;
+	
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
-
+	private ExecutorService messageManager = Executors.newFixedThreadPool(NUM_HILOS);
+	
 	// METHODS
 	/* When someone connects to the server, this method is executed */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //¿A que sala hay que añadirlo?
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
+		messageManager.execute(()->player.manageMessages());
 		
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
@@ -41,7 +47,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		msg.put("shipType", player.getShipType());
 		msg.put("room", "lobby");
 		player.setActualRoom("lobby");
-		player.getSession().sendMessage(new TextMessage(msg.toString()));
+		player.addMessage(new TextMessage(msg.toString()));
 		
 		game.lobby.addJugador(player);
 	}
@@ -78,7 +84,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("event", "JOIN");
 				msg.put("id", player.getPlayerId());
 				msg.put("shipType", player.getShipType());
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "CREATE ROOM":
@@ -96,19 +102,19 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("valido", aux);
 				msg.put("sala", node.path("sala").asText());
 				if(aux) player.setActualRoom(node.path("sala").asText());
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "PARTIDAS":
 				msg.put("event", "PARTIDAS");
 				msg.put("partidas", getWaitRooms());
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "UPDATE PARTIDAS":
 				msg.put("event", "UPDATE PARTIDAS");
 				msg.put("partidas", getWaitRooms());
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 					
 			case "UPDATE ACTIVE PLAYERS":
@@ -123,7 +129,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				
 				msg.put("event", "UPDATE ACTIVE PLAYERS");				
 				msg.putPOJO("players", arrayNodePlayers);
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "JOIN ROOM":
@@ -146,7 +152,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				// Si hemos pasado de una room a una battleroom hay que ver que hacemos..
 				game.addPlayerToRoom(sala_destino, player);
 				
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "UPDATE MOVEMENT":
@@ -167,7 +173,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("event", "UPDATE NUMJUG");
 					msg.put("numJugadores", game.waitRooms.get(node.get("room").asText()).getNumJugadores());
 					
-					player.getSession().sendMessage(new TextMessage(msg.toString()));
+					player.addMessage(new TextMessage(msg.toString()));
 				}
 				break;
 					
@@ -177,7 +183,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("content", node.path("content").asText());
 				
 				for (Map.Entry<String, Player> entry : game.lobby.Jugadores.entrySet()) {
-				    entry.getValue().getSession().sendMessage(new TextMessage(msg.toString()));
+				    entry.getValue().addMessage(new TextMessage(msg.toString()));
 				}
 				break;
 				
@@ -216,7 +222,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					msg.put("response", error);
 				}
 				
-				player.getSession().sendMessage(new TextMessage(msg.toString()));
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 					
 				

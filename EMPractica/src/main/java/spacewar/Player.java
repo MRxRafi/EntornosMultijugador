@@ -1,6 +1,8 @@
 package spacewar;
 
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -20,6 +22,7 @@ public class Player extends Spaceship {
 	private int bullets;
 	private int lifePoints;
 	private int score;
+	private BlockingQueue<TextMessage> messages = new ArrayBlockingQueue<TextMessage>(10);
 	
 	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
@@ -89,6 +92,27 @@ public class Player extends Spaceship {
 		this.score = score;
 	}
 
+	public void addMessage(TextMessage msg) {
+		try {
+			messages.put(msg);
+		} catch (InterruptedException e) {
+			System.out.println("Proceso de añadir mensaje en " + this.playerId + " interrumpido por otro proceso.");
+			e.printStackTrace();
+		}
+	}
+	
+	public void manageMessages() {
+		while(true) {
+			try {
+				TextMessage send = messages.take();
+				this.session.sendMessage(send);
+			} catch (Exception e) {
+				System.out.println("Proceso de recoger un mensaje en " + this.playerId + " interrumpido por otro proceso.");
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	private String getRandomShipType() {
 		String[] randomShips = { "blue", "darkgrey", "green", "metalic", "orange", "purple", "red" };
 		String ship = (randomShips[new Random().nextInt(randomShips.length)]);
