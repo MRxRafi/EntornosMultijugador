@@ -45,11 +45,7 @@ Spacewar.roomState.prototype = {
 	},
 
 	update : function() {
-		let message = {
-			event : 'UPDATE NUMJUG',
-			room : game.global.myPlayer.room
-		}
-		game.global.socket.send(JSON.stringify(message))
+		updateNumPlayers();
 		
 		numJugText.setText(game.global.myRoom.numJugadores + '/' + MAX_JUGADORES+"👥")
 		
