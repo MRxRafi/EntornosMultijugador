@@ -102,7 +102,7 @@ public class BattleRoom extends GenericRoom {
 
 			// Handle collision and remove players when life <= 0
 			Set<String> removePlayers = new HashSet<String>();
-			System.out.println(getNumJugadores());
+			//System.out.println(getNumJugadores());
 			if(getNumJugadores()==1) {
 				for(Player player : getPlayers()) {
 					removePlayers.add(player.getSession().getId());
@@ -119,8 +119,9 @@ public class BattleRoom extends GenericRoom {
 				msg.put("event", "REMOVE PLAYER");
 				msg.put("id", delPlayer.getPlayerId());
 				numPlayers.decrementAndGet();
-				
+
 				this.broadcast(msg.toString());
+				
 				Jugadores.remove(idPlayer);
 				// ¿Add players into another room like rankRoom or lobby?
 				
@@ -174,6 +175,7 @@ public class BattleRoom extends GenericRoom {
 			json.putPOJO("projectiles", arrayNodeProjectiles);
 
 			this.broadcast(json.toString());
+			
 		} catch (Throwable ex) {
 
 		}
