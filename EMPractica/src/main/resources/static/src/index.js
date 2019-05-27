@@ -20,8 +20,8 @@ window.onload = function() {
 	game.global.myInterface.otherPlayers = []
 	
 	// WEBSOCKET CONFIGURATOR
-	//game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
-	game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
+	game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
+	//game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
 	
 	game.global.socket.onopen = () => {
 		if (game.global.DEBUG_MODE) {
@@ -163,6 +163,14 @@ window.onload = function() {
 			game.global.myPlayer.room = msg.room;
 			game.global.myRoom.idHost=msg.idHost;
 			break
+			
+		case 'ROOM DELETED':
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] ROOM DELETED message recieved')
+				console.dir(msg)
+			}
+			game.global.myPlayer.room = 'lobby';
+			game.state.start("lobbyState");
 		case 'GAME STATE UPDATE' :
 			if (game.global.DEBUG_MODE) {
 				//console.log('[DEBUG] GAME STATE UPDATE message recieved')
