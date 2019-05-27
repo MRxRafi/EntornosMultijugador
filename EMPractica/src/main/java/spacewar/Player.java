@@ -108,7 +108,7 @@ public class Player extends Spaceship {
 				this.session.sendMessage(send);
 			} catch (Exception e) {
 				System.out.println("Proceso de recoger un mensaje en " + this.playerId + " interrumpido por otro proceso.");
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 	}

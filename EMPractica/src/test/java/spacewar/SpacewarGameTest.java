@@ -3,21 +3,15 @@ package spacewar;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletionService;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -160,7 +154,7 @@ public class SpacewarGameTest {
 			sem.acquire();
 		} else {
 			join.await(); //Hasta que los clientes y el host no lleguen no se sigue
-			//join.reset();
+			join.reset();
 			if(DEBUG) System.out.println("A room has been created.");
 			if(DEBUG) System.out.println("Attempting to Start the game.. ");
 			jsonMessage = "{\"event\":\"START GAME\",\"room\":\"sape\",\"empezar\":true}";
@@ -169,7 +163,7 @@ public class SpacewarGameTest {
 			sem.acquire();
 			join2.await();
 		}
-		
+		join.await();
 		
 		ws.disconnect();
 		return message.get();
