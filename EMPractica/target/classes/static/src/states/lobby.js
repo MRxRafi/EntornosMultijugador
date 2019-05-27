@@ -84,7 +84,7 @@ Spacewar.lobbyState.prototype = {
 		if (typeof game.global.myPlayer.id !== 'undefined') {
 			hideChat();
 			inputChat.hide();
-			inputRoom.hide();
+			if(typeof inputRoom != 'undefined') inputRoom.hide();
 			let message = {
 				event : 'PARTIDAS'
 			}

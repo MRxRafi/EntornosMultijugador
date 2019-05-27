@@ -28,7 +28,7 @@ public class SpacewarGameTest {
 		Application.main(new String[] { "--server.port=9000" });
 	}
 
-	//@Test
+	@Test
 	public void testConnection() throws Exception {
 
 		WebSocketClient ws = new WebSocketClient();
@@ -36,7 +36,7 @@ public class SpacewarGameTest {
 		ws.disconnect();
 	}
 
-	//@Test
+	@Test
 	public void testJoinThreads() throws Exception {
 		final int NUM_CLIENTES = 4;
 		
