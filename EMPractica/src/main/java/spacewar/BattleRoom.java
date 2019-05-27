@@ -20,6 +20,7 @@ public class BattleRoom extends GenericRoom {
 
 	private final static int FPS = 30;
 	private final static long TICK_DELAY = 1000 / FPS;
+	private final static int worldBounds = 3000;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
 	
@@ -87,6 +88,13 @@ public class BattleRoom extends GenericRoom {
 			// Update players
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
+				
+				double posX = player.getPosX();
+				double posY = player.getPosY();
+				//Ajustamos la posición a los límites del escenario
+				posX = (posX+worldBounds) % worldBounds;
+				posY = (posY+worldBounds) % worldBounds;
+				player.setPosition(posX, posY);
 				
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
