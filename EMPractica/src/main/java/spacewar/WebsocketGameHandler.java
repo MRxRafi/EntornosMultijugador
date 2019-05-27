@@ -30,12 +30,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	// VARIABLES AND FIXED VALUES
 	private SpacewarGame game = SpacewarGame.INSTANCE;
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
-	private final int NUM_HILOS = 10;
+
 	private CopyOnWriteArraySet<String> allNames = new CopyOnWriteArraySet<String>();
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
-	private ExecutorService messageManager = Executors.newFixedThreadPool(NUM_HILOS);
+	private ExecutorService messageManager = Executors.newCachedThreadPool();
 	
 	// METHODS
 	/* When someone connects to the server, this method is executed */
@@ -43,8 +43,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //¿A que sala hay que añadirlo?
 		Player player = new Player(playerId.incrementAndGet(), session);
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
-		messageManager.execute(()->player.manageMessages());
-		
+		player.setTask(messageManager.submit(()->player.manageMessages()));
+
 		ObjectNode msg = mapper.createObjectNode();
 		msg.put("event", "JOIN");
 		msg.put("id", player.getPlayerId());
@@ -191,9 +191,38 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				break;
 				
 			case "UPDATE NUMJUG":
+				
 				if(game.waitRooms.containsKey(node.get("room").asText())) {
+					String room = node.get("room").asText();
+					int numPlayers = game.waitRooms.get(room).getNumJugadores();
+					
 					msg.put("event", "UPDATE NUMJUG");
-					msg.put("numJugadores", game.waitRooms.get(node.get("room").asText()).getNumJugadores());
+					msg.put("numJugadores", numPlayers);
+					msg.put("comenzar", false);
+					
+					boolean cond1 = player.getPlayerId() == game.waitRooms.get(room).getIdHost();
+					boolean cond2 = node.get("empezar").asBoolean();
+					boolean cond3 = numPlayers == game.waitRooms.get(room).getMaxPlayers();
+					
+					if(cond1 && (cond2 || cond3)) {
+						//Si contiene la room, creamos una battleRoom y mandamos mensaje al cliente
+						game.waitRooms.get(room).setEmpezar(true);
+						Map<String, Player> mp = game.waitRooms.get(room).Jugadores;
+						//Ponemos la vida a 10
+						for(String key : mp.keySet()) {
+							mp.get(key).setLifePoints(10);
+							mp.get(key).setScore(0);
+						}
+						//System.out.println(mp.keySet().size());
+						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
+						int nJ=game.waitRooms.get(room).getNumJugadores();
+						game.battleRooms.get(room).numPlayers.set(nJ);
+						game.battleRooms.get(room).startGameLoop();
+						
+						game.waitRooms.remove(room);
+						
+						msg.put("comenzar", true);
+					}
 					
 					player.addMessage(new TextMessage(msg.toString()));
 				}
@@ -216,29 +245,9 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				msg.put("response", "valido");
 				msg.put("room", room);
 				
-				if(game.waitRooms.containsKey(room)) {
-
-					if(player.getPlayerId() == game.waitRooms.get(room).getIdHost()) {
-						//Si contiene la room, creamos una battleRoom y mandamos mensaje al cliente
-						game.waitRooms.get(room).setEmpezar(true);
-						Map<String, Player> mp = game.waitRooms.get(room).Jugadores;
-						//Ponemos la vida a 10
-						for(String key : mp.keySet()) {
-							mp.get(key).setLifePoints(10);
-							mp.get(key).setScore(0);
-						}
-						//System.out.println(mp.keySet().size());
-						game.battleRooms.put(room, new BattleRoom(room, game.waitRooms.get(room).Jugadores, game.scheduler));
-						int nJ=game.waitRooms.get(room).getNumJugadores();
-						game.battleRooms.get(room).numPlayers.set(nJ);
-						game.battleRooms.get(room).startGameLoop();
-						
-						game.waitRooms.remove(room);
-					}
-					
-				} else if(game.battleRooms.containsKey(room)) {
+				if(game.battleRooms.containsKey(room)) {
 					msg.put("comenzado", true);
-				} else {
+				} else if(!game.waitRooms.containsKey(room)){
 					//Si no la contiene, mandamos un error (no debería ocurrir)
 					String error = "Error al crear battleRoom. La room especificada no está en waitRooms.";
 					msg.put("response", error);
@@ -262,6 +271,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
 		Player player = (Player) session.getAttributes().get(PLAYER_ATTRIBUTE);
+		player.getTask().cancel(true);
+
 		String sala_actual = player.getActualRoom();
 		ObjectNode msg = mapper.createObjectNode();
 

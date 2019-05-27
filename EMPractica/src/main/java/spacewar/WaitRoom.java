@@ -4,6 +4,7 @@ public class WaitRoom extends GenericRoom {
 	
 	private int IdHost;
 	private boolean empezar;
+	private final int MAX_PLAYERS = 4;
 	
 	public WaitRoom(String nombre) {
 		this.nombre = nombre;
@@ -32,6 +33,10 @@ public class WaitRoom extends GenericRoom {
 
 	public void setEmpezar(boolean empezar) {
 		this.empezar = empezar;
+	}
+	
+	public int getMaxPlayers() {
+		return this.MAX_PLAYERS;
 	}
 
 	public String toString() {

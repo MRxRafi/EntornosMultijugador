@@ -72,13 +72,18 @@ public class SpacewarGame {
 		if(actualRoom == "lobby") {
 			lobby.deleteJugador(player);
 		} else if(battleRooms.containsKey(actualRoom)) {
-			
-			// ¿Lock para evitar fallo de concurrencia?
 			battleRooms.get(actualRoom).deleteJugador(player);
 			battleRooms.get(actualRoom).broadcast(msg.toString());
 			
 		} else if(waitRooms.containsKey(actualRoom)) {
-			waitRooms.get(actualRoom).deleteJugador(player);
+			WaitRoom actRoom = waitRooms.get(actualRoom);
+			actRoom.deleteJugador(player);
+			if(actRoom.getIdHost() == player.getPlayerId()) {
+				msg.removeAll();
+				msg.put("event", "ROOM DELETED");
+				actRoom.broadcast(msg.toString());
+				waitRooms.remove(actualRoom);
+			}
 		}
 	}
 }

@@ -34,7 +34,8 @@ function updateActivePlayers(){
 function updateNumPlayers(){
 	let message = {
 			event : 'UPDATE NUMJUG',
-			room : game.global.myPlayer.room
+			room : game.global.myPlayer.room,
+			empezar : false
 		}
 		game.global.socket.send(JSON.stringify(message))
 }

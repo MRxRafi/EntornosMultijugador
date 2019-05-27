@@ -59,8 +59,11 @@ Spacewar.preloadState.prototype = {
     },
 	//Una vez se hayan cargado los Assets y las fuentes se pasa al menú de inicio
 	update : function() {
-		if (this.ready && this.fontsReady) {
-			game.state.start('menuState');
-		}        
+		if(typeof game.global.myPlayer.id != 'undefined'){
+			if (this.ready && this.fontsReady) {
+				game.state.start('menuState');
+			}  
+		}
+		      
 	}
 }
