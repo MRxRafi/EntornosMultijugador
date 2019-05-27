@@ -79,7 +79,7 @@ Spacewar.menuState.prototype = {
 				menuText[i].events.onInputDown.add(this.play, this);
 				break;
 			case 1:
-				// menuText[i].events.onInputDown.add(this.options,this);
+				menuText[i].events.onInputDown.add(this.closeSession,this);
 				break;
 			}
 
@@ -104,7 +104,24 @@ Spacewar.menuState.prototype = {
 		}
 	},
 
-	options : function() {
+	//Si se ha iniciado sesión con un nombre se borra y se vuelve a pedir
+	closeSession : function() {
+		if (typeof game.global.myPlayer.id !== 'undefined'
+				&& typeof game.global.myPlayer.name !== 'undefined') {
+			game.global.myPlayer.name = 'undefined';
+			var inputName = new inputText("rgb(0,130,130)", "white",
+					"Introduzca su nombre de usuario:", "Aceptar", 15);
 
-	},
+			inputName.submitButton.onclick = function() {
+				if (inputName.input.value !== "") {
+					setPlayerName(inputName.input.value); // objects/functions.js
+				} else {
+					alert("El nombre de usuario está vacío")
+				}
+			}
+			
+		} else {
+			alert("Debes iniciar sesión para poder cerrarla");
+		}
+	}
 }
