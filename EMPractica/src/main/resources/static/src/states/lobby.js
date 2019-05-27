@@ -50,6 +50,9 @@ Spacewar.lobbyState.prototype = {
 			case 1:
 				lobbyText[i].events.onInputDown.add(this.buscar, this);
 				break;
+			case 2:
+				lobbyText[i].events.onInputDown.add(this.volver, this);
+				break;
 			}
 
 			y += yOffset;
@@ -90,5 +93,11 @@ Spacewar.lobbyState.prototype = {
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}
+	},
+	
+	volver : function() {
+		inputChat.hide();
+		hideChat();
+		game.state.start('menuState');
 	}
 }
