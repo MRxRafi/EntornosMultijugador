@@ -40,6 +40,20 @@ window.onload = function() {
 		var msg = JSON.parse(message.data)
 		
 		switch (msg.event) {
+		case "ADD NAME":
+			if (game.global.DEBUG_MODE) {
+				console.log('[DEBUG] ADD NAME message recieved')
+				console.dir(msg)
+			}
+
+			if(msg.isAdded){
+				game.global.myPlayer.name=msg.playerName;
+			}
+			else{
+				alert("Nombre escogido no valido")
+			}
+
+			break;
 		case 'PARTIDAS':
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] PARTIDAS message recieved')

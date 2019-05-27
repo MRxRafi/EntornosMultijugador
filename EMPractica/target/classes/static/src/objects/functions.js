@@ -8,10 +8,9 @@ function setRoomName(name) {
 }
 
 function setPlayerName(name) {
-	game.global.myPlayer.name = name;
 	let message = {
 		event : 'PLAYER NAME',
-		playerName : game.global.myPlayer.name
+		playerName : name
 	}
 	game.global.socket.send(JSON.stringify(message))
 }

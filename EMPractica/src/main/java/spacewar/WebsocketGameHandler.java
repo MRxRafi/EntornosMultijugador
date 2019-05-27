@@ -1,6 +1,7 @@
 package spacewar;
 
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -27,7 +28,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private SpacewarGame game = SpacewarGame.INSTANCE;
 	private static final String PLAYER_ATTRIBUTE = "PLAYER";
 	private final int NUM_HILOS = 10;
-	
+	private CopyOnWriteArraySet<String> allNames = new CopyOnWriteArraySet<String>();
 	private ObjectMapper mapper = new ObjectMapper();
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
@@ -77,7 +78,19 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 
 			switch (node.get("event").asText()) {
 			case "PLAYER NAME":
-				player.setName(node.get("playerName").asText());
+				msg.put("event","ADD NAME");
+				msg.put("playerName", node.get("playerName").asText());
+				synchronized (game) {
+					if(allNames.contains(node.get("playerName").asText())) {
+						msg.put("isAdded", false);
+					}
+					else {
+						msg.put("isAdded", true);
+						allNames.add(node.get("playerName").asText());
+						player.setName(node.get("playerName").asText());
+					}					
+				}
+				player.addMessage(new TextMessage(msg.toString()));
 				break;
 				
 			case "JOIN":

@@ -25,21 +25,22 @@ Spacewar.menuState.prototype = {
 
 	create : function() {
 		// Se crea una barra de texto
+		game.global.myPlayer.continue=false;
 		if(!game.global.myPlayer.name){
-			var inputName = new inputText("rgb(0,130,130)", "white",
-				"Introduzca su nombre de usuario:", "Aceptar", 15);
-				// Al pulsar el botón se asigna al nombre del jugador el valor escrito
-		// en la barra de texto. Si no hay nada escrito salta una alerta
-		inputName.submitButton.onclick = function() {
-			if (inputName.input.value !== "") {
-				setPlayerName(inputName.input.value); // objects/functions.js
-				inputName.hide();
-			} else {
-				alert("El nombre de usuario está vacío")
+			inputName = new inputText("rgb(0,130,130)", "white",
+			"Introduzca su nombre de usuario:", "Aceptar", 15);
+			// Al pulsar el botón se asigna al nombre del jugador el valor escrito
+			// en la barra de texto. Si no hay nada escrito salta una alerta
+			inputName.submitButton.onclick = function() {
+				if (inputName.input.value !== "") {
+					setPlayerName(inputName.input.value); // objects/functions.js
+					console.log(game.global.myPlayer.name)
+				
+				} else {
+					alert("El nombre de usuario está vacío")
+				}
 			}
-		}
-		
-		
+			
 		};
 
 		// Estilos de texto
@@ -86,6 +87,12 @@ Spacewar.menuState.prototype = {
 		}
 	},
 
+	update : function(){
+		if(game.global.myPlayer.name){
+			inputName.hide();
+		}
+	},
+	
 	play : function() {
 		// Si el jugador tiene un id y un nombre asignado, pasa al siguiente
 		// estado
