@@ -67,6 +67,7 @@ Spacewar.gameState.prototype = {
 	},
 
 	create : function() {
+		game.global.myRoom.scores=[];
 		game.global.myPlayer.numBullets=this.MAX_BULLETS
 		this.fuel=this.MAX_FUEL
 		this.bulletTime = 0
