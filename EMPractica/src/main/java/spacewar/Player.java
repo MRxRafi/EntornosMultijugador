@@ -1,5 +1,6 @@
 package spacewar;
 
+import java.util.Comparator;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -129,4 +130,21 @@ public class Player extends Spaceship {
 		ship += "_0" + (new Random().nextInt(5) + 1) + ".png";
 		return ship;
 	}
+}
+
+class PlayerComparer implements Comparator <Player> {
+	@Override
+	  public int compare(Player p1, Player p2) {
+	    // TODO: Handle null x or y values
+	    int startComparison = compare(p1.getScore(),p2.getScore());
+	    return startComparison;
+	  }
+
+	  // I don't know why this isn't in Long...
+	  private static int compare(int a, int b) {
+	    return a < b ? 1
+	         : a > b ? -1
+	         : 0;
+	  }
+
 }

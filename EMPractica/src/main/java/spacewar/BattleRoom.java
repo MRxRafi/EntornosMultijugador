@@ -1,10 +1,12 @@
 package spacewar;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -20,12 +22,14 @@ public class BattleRoom extends GenericRoom {
 
 	private final static int FPS = 30;
 	private final static long TICK_DELAY = 1000 / FPS;
+	private final static int worldBounds = 3000;
 	public final static boolean DEBUG_MODE = true;
 	public final static boolean VERBOSE_MODE = true;
 	
 	private Map<Integer, Projectile> projectiles = new ConcurrentHashMap<>();
 	private ScheduledExecutorService battleScheduler;
 	private ScheduledFuture<?> task;
+	private CopyOnWriteArrayList<Player> scores= new CopyOnWriteArrayList<Player>();
 	
 	ObjectMapper mapper = new ObjectMapper();
 	
@@ -38,6 +42,13 @@ public class BattleRoom extends GenericRoom {
 		this.nombre = nombre;
 		this.battleScheduler = scheduler;
 		this.Jugadores = players;
+		for(Player p : players.values()) {
+			scores.add(p);
+		}
+	}
+	
+	public Collection<Player> getScore(){
+		return scores;
 	}
 	
 	public BattleRoom(String nombre, Player player, ScheduledExecutorService scheduler) {
@@ -88,6 +99,13 @@ public class BattleRoom extends GenericRoom {
 			for (Player player : getPlayers()) {
 				player.calculateMovement();
 				
+				double posX = player.getPosX();
+				double posY = player.getPosY();
+				//Ajustamos la posición a los límites del escenario
+				posX = (posX+worldBounds) % worldBounds;
+				posY = (posY+worldBounds) % worldBounds;
+				player.setPosition(posX, posY);
+				
 				ObjectNode jsonPlayer = mapper.createObjectNode();
 				jsonPlayer.put("id", player.getPlayerId());
 				jsonPlayer.put("name", player.getName());
@@ -134,17 +152,19 @@ public class BattleRoom extends GenericRoom {
 				
 				for (Player player : getPlayers()) {
 					if ((projectile.getOwner().getPlayerId() != player.getPlayerId()) && player.intersect(projectile)) {
-						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");
+						// System.out.println("Player " + player.getPlayerId() + " was hit!!!");					
 						projectile.getOwner().setScore(projectile.getOwner().getScore() + 10);
 						player.setLifePoints(player.getLifePoints() - 1);
 						if(player.getLifePoints() <= 0){
 							removePlayers.add(player.getSession().getId());
 							projectile.getOwner().setScore(projectile.getOwner().getScore() + 100);
 						}
+						Collections.sort(scores,new PlayerComparer());
 						projectile.setHit(true);
 						break;
 					}
 				}
+				
 				
 				ObjectNode jsonProjectile = mapper.createObjectNode();
 				jsonProjectile.put("id", projectile.getId());
@@ -169,7 +189,7 @@ public class BattleRoom extends GenericRoom {
 
 			if (removeBullets)
 				this.projectiles.keySet().removeAll(bullets2Remove);
-
+			
 			json.put("event", "GAME STATE UPDATE");
 			json.putPOJO("players", arrayNodePlayers);
 			json.putPOJO("projectiles", arrayNodeProjectiles);

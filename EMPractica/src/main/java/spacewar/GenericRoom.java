@@ -1,9 +1,13 @@
 package spacewar;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.web.socket.TextMessage;
@@ -12,15 +16,17 @@ public class GenericRoom {
 	protected Map<String, Player> Jugadores = new ConcurrentHashMap<String, Player>();	
 	protected AtomicInteger numPlayers = new AtomicInteger(0);
 	protected String nombre;
+	protected ArrayList<Player> scores = new ArrayList<Player>();
 	
 	public GenericRoom() { }
 	
 	public GenericRoom(String nombre, Player player) {
 		Jugadores.put(player.getSession().getId(), player);
 		numPlayers.incrementAndGet();
-
 		this.nombre=nombre;
 	}
+	
+	
 	
 	/* Returns a collection containing all the values from the players structure */
 	public Collection<Player> getPlayers() {

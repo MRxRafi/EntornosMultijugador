@@ -4,10 +4,13 @@ Spacewar.gameState = function(game) {
 		font : "60px Chakra Petch",
 		boundsAlignH : "left",
 	}
-	this.MAX_BULLETS=100
+	this.worldBounds = 3000
+	this.MAX_BULLETS=10
 	this.MAX_FUEL=50
 	this.bulletTime
 	this.fireBullet
+	this.rechargeTime
+	this.recharge
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
 	game.global.myPlayer.healthBar
@@ -19,7 +22,7 @@ Spacewar.gameState.prototype = {
 		if (game.global.DEBUG_MODE) {
 			console.log("[DEBUG] Entering **GAME** state");
 		}
-		game.world.setBounds(0, 0, 3000, 3000);
+		game.world.setBounds(0, 0, this.worldBounds, this.worldBounds);
 	},
 
 	preload : function() {
@@ -40,7 +43,7 @@ Spacewar.gameState.prototype = {
 			game.global.projectiles[i].image.anchor.setTo(0.5, 0.5)
 			game.global.projectiles[i].image.visible = false
 		}
-
+		
 		// we load a random ship
 		let random = [ 'blue', 'darkgrey', 'green', 'metalic', 'orange',
 				'purple', 'red' ]
@@ -67,6 +70,7 @@ Spacewar.gameState.prototype = {
 	},
 
 	create : function() {
+		game.global.myRoom.scores=[];
 		game.global.myPlayer.numBullets=this.MAX_BULLETS
 		this.fuel=this.MAX_FUEL
 		this.bulletTime = 0
@@ -78,6 +82,13 @@ Spacewar.gameState.prototype = {
 				return true
 			} else {
 				return false
+			}
+		}
+		this.rechargeTime = 0
+		this.recharge = function() {
+			if (game.time.now > this.bulletTime && game.global.myPlayer.numBullets<this.MAX_BULLETS) {
+				this.bulletTime = game.time.now + 200;
+				game.global.myPlayer.numBullets++			
 			}
 		}
 
@@ -143,6 +154,8 @@ Spacewar.gameState.prototype = {
 				msg.movement.rotRight = true;
 			if (this.spaceKey.isDown) {
 				msg.bullet = this.fireBullet()
+			} else {
+				this.recharge()
 			}
 
 			if (game.global.DEBUG_MODE) {

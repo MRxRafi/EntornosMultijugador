@@ -1,6 +1,9 @@
 package spacewar;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -178,6 +181,12 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					Projectile projectile = new Projectile(player, this.projectileId.incrementAndGet());
 					game.battleRooms.get(player.getActualRoom()).addProjectile(projectile.getId(), projectile);
 				}
+				
+				msg.put("event","UPDATE SCORE");
+				System.out.println(game.battleRooms.get(player.getActualRoom()).getScore().toString());
+				msg.put("scores",game.battleRooms.get(player.getActualRoom()).getScore().toString());
+				player.addMessage(new TextMessage(msg.toString()));
+				//System.out.println(game.battleRooms.get(player.getActualRoom()).getScore().toString());
 				
 				break;
 				
