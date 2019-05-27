@@ -68,7 +68,7 @@ Spacewar.menuState.prototype = {
 	    	titleText.fill = grd;
 		
 		// Crea el texto de las opciones del menú
-		menuOptions = [ "Jugar", "Cerrar Sesión", "Volver" ];
+		menuOptions = [ "Jugar", "Cerrar Sesión" ];
 		var y = game.canvas.height / 3;
 		var yOffset = 80;
 		var menuText = [];
