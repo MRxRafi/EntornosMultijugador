@@ -59,7 +59,14 @@ Spacewar.menuState.prototype = {
 		// Crea el texto del Título
 		var titleText = game.add.text(0, 0, "SPACE WAR", titleStyle);
 		titleText.setTextBounds(0, 0, game.world.width, game.world.height);
+		
+		// Gradiente
+		var grd = titleText.context.createLinearGradient(0, 0, 0, titleText.height);
+	    	grd.addColorStop(0, 'rgb(255,0,255)');   
+	    	grd.addColorStop(1, 'rgb(0,255,255)');
 
+	    	titleText.fill = grd;
+		
 		// Crea el texto de las opciones del menú
 		menuOptions = [ "Jugar", "Cerrar Sesión", "Volver" ];
 		var y = game.canvas.height / 3;
