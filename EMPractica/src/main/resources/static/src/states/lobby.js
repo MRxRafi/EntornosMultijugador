@@ -24,11 +24,21 @@ Spacewar.lobbyState.prototype = {
 			}
 		}
 		
+		var titleStyle = {
+				fill : "rgb(255,255,255)",
+				font : "100px Chakra Petch",
+				boundsAlignH : "center"
+		};
 		var style = {
 			fill : "rgb(255,255,255)",
 			font : "60px Chakra Petch",
 			boundsAlignH : "center"
 		};
+		
+		var titleText = game.add.text(0, 0, "Lobby", titleStyle);
+		titleText.setTextBounds(0, 0, game.world.width, game.world.height);
+		
+		lobbyOptions = [ "Crear Partida", "Buscar Partida", "Volver" ];
 
 		lobbyOptions = [ "Crear Partida", "Buscar Partida" ];
 		var y = game.canvas.height / 3;
@@ -49,6 +59,9 @@ Spacewar.lobbyState.prototype = {
 				break;
 			case 1:
 				lobbyText[i].events.onInputDown.add(this.buscar, this);
+				break;
+			case 2:
+				lobbyText[i].events.onInputDown.add(this.volver, this);
 				break;
 			}
 
@@ -90,5 +103,11 @@ Spacewar.lobbyState.prototype = {
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}
+	},
+	
+	volver : function() {
+		inputChat.hide();
+		hideChat();
+		game.state.start('menuState');
 	}
 }

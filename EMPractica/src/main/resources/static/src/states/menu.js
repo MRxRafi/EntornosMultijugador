@@ -59,9 +59,16 @@ Spacewar.menuState.prototype = {
 		// Crea el texto del Título
 		var titleText = game.add.text(0, 0, "SPACE WAR", titleStyle);
 		titleText.setTextBounds(0, 0, game.world.width, game.world.height);
+		
+		// Gradiente
+		var grd = titleText.context.createLinearGradient(0, 0, 0, titleText.height);
+	    	grd.addColorStop(0, 'rgb(255,0,255)');   
+	    	grd.addColorStop(1, 'rgb(0,255,255)');
 
+	    	titleText.fill = grd;
+		
 		// Crea el texto de las opciones del menú
-		menuOptions = [ "Jugar", "Opciones" ];
+		menuOptions = [ "Jugar", "Cerrar Sesión", "Volver" ];
 		var y = game.canvas.height / 3;
 		var yOffset = 80;
 		var menuText = [];
@@ -79,7 +86,7 @@ Spacewar.menuState.prototype = {
 				menuText[i].events.onInputDown.add(this.play, this);
 				break;
 			case 1:
-				// menuText[i].events.onInputDown.add(this.options,this);
+				menuText[i].events.onInputDown.add(this.closeSession,this);
 				break;
 			}
 
@@ -104,7 +111,24 @@ Spacewar.menuState.prototype = {
 		}
 	},
 
-	options : function() {
+	//Si se ha iniciado sesión con un nombre se borra y se vuelve a pedir
+	closeSession : function() {
+		if (typeof game.global.myPlayer.id !== 'undefined'
+				&& typeof game.global.myPlayer.name !== 'undefined') {
+			game.global.myPlayer.name = undefined;
+			var inputName = new inputText("rgb(0,130,130)", "white",
+					"Introduzca su nombre de usuario:", "Aceptar", 15);
 
-	},
+			inputName.submitButton.onclick = function() {
+				if (inputName.input.value !== "") {
+					setPlayerName(inputName.input.value); // objects/functions.js
+				} else {
+					alert("El nombre de usuario está vacío")
+				}
+			}
+			
+		} else {
+			alert("Debes iniciar sesión para poder cerrarla");
+		}
+	}
 }
