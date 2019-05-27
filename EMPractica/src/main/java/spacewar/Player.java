@@ -3,6 +3,7 @@ package spacewar;
 import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Future;
 
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -23,6 +24,7 @@ public class Player extends Spaceship {
 	private int lifePoints;
 	private int score;
 	private BlockingQueue<TextMessage> messages = new ArrayBlockingQueue<TextMessage>(10);
+	private Future<?> task;
 	
 	// BUILDER
 	public Player(int playerId, WebSocketSession session) {
@@ -91,6 +93,14 @@ public class Player extends Spaceship {
 	public void setScore(int score) {
 		this.score = score;
 	}
+	
+	public Future<?> getTask() {
+		return task;
+	}
+
+	public void setTask(Future<?> task) {
+		this.task = task;
+	}
 
 	public void addMessage(TextMessage msg) {
 		try {
@@ -102,7 +112,7 @@ public class Player extends Spaceship {
 	}
 	
 	public void manageMessages() {
-		while(true) {
+		while(this.session.isOpen()) {
 			try {
 				TextMessage send = messages.take();
 				this.session.sendMessage(send);

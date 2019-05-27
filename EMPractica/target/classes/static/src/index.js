@@ -20,7 +20,8 @@ window.onload = function() {
 	game.global.myInterface.otherPlayers = []
 	
 	// WEBSOCKET CONFIGURATOR
-	game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
+	//game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
+	game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
 	
 	game.global.socket.onopen = () => {
 		if (game.global.DEBUG_MODE) {
@@ -124,6 +125,7 @@ window.onload = function() {
 			
 		case 'UPDATE NUMJUG':
 			game.global.myRoom.numJugadores = msg.numJugadores;
+			if(msg.comenzar) game.state.start("gameState");
 			//console.log(game.global.myRoom.numJugadores)
 			break
 		
