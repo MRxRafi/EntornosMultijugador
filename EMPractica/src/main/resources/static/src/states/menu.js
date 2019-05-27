@@ -109,7 +109,7 @@ Spacewar.menuState.prototype = {
 		if (typeof game.global.myPlayer.id !== 'undefined'
 				&& typeof game.global.myPlayer.name !== 'undefined') {
 			game.global.myPlayer.name = 'undefined';
-			var inputName = new inputText("rgb(0,130,130)", "white",
+			inputName = new inputText("rgb(0,130,130)", "white",
 					"Introduzca su nombre de usuario:", "Aceptar", 15);
 
 			inputName.submitButton.onclick = function() {
