@@ -21,8 +21,8 @@ window.onload = function() {
 	game.global.myInterface.otherPlayers = []
 	
 	// WEBSOCKET CONFIGURATOR
-	//game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
-	game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
+	game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
+	//game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
 	
 	game.global.socket.onopen = () => {
 		if (game.global.DEBUG_MODE) {
@@ -49,6 +49,7 @@ window.onload = function() {
 				}
 				var lista=JSON.parse(msg.globalScore)
 				game.global.globalScores=lista
+				game.global.myPlayer.globalScore=msg.myGlobalScore
 				console.log(game.global.globalScores)
 		case "ADD NAME":
 			if (game.global.DEBUG_MODE) {

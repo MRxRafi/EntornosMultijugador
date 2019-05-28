@@ -35,7 +35,18 @@ Spacewar.lobbyState.prototype = {
 			font : "60px Chakra Petch",
 			boundsAlignH : "center"
 		};
-		
+
+		var styleScore = {
+			fill : "rgb(255,255,255)",
+			font : "40px Chakra Petch",
+			boundsAlignH : "center"
+		};
+		nombre=game.add.text(10,10,"👤 "+game.global.myPlayer.name,styleScore);
+		nombre.anchor.setTo(0,0)
+
+		globalScore=game.add.text(10,60,game.global.myPlayer.globalScore +" 🌟",styleScore)
+		globalScore.anchor.setTo(0,0)
+
 		var titleText = game.add.text(0, 0, "Lobby", titleStyle);
 		titleText.setTextBounds(0, 0, game.world.width, game.world.height);
 		
@@ -93,18 +104,19 @@ Spacewar.lobbyState.prototype = {
 		updateActivePlayers();
 		updateGlobalScores()
 		if(game.global.globalScores){
+			globalScore.setText(game.global.myPlayer.globalScore+" 🌟")
 			if(game.global.globalScores.length>this.MAX_NUM_SCORE){
 				for(i=0;i<this.MAX_NUM_SCORE;i++){
 					if(game.global.globalScores[i]){
 						console.log(game.global.globalScores[i])
-						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore+" 🌟")
 					}
 				}
 			}
 			else{
 				for(i=0;i<game.global.globalScores.length;i++){
 					if(game.global.globalScores[i]){
-						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore+" 🌟")
 					}						
 				}
 			}

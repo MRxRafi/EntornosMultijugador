@@ -107,7 +107,7 @@ Spacewar.gameState.prototype = {
 		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
 		bulletsText.anchor.setTo(0,1);
 		bulletsText.fixedToCamera = true;
-		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,game.global.myPlayer.score + " pts",style)
+		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,game.global.myPlayer.score + " 🌟",style)
 		fuelText.anchor.setTo(1,1);
 		fuelText.fixedToCamera = true;
 
@@ -153,7 +153,7 @@ Spacewar.gameState.prototype = {
 
 			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 
-			fuelText.setText(game.global.myPlayer.score + " pts");
+			fuelText.setText(game.global.myPlayer.score + " 🌟");
 			
 			game.global.myPlayer.fuelBar.setPercent(this.fuel * 2)
 			
@@ -162,13 +162,13 @@ Spacewar.gameState.prototype = {
 				if(game.global.myRoom.scores.length>this.MAX_NUM_SCORE){
 					for(i=0;i<this.MAX_NUM_SCORE;i++){
 						if(game.global.myRoom.scores)
-						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score+" 🌟")
 					}
 				}
 				else{
 					for(i=0;i<game.global.myRoom.scores.length;i++){
 						if(game.global.myRoom.scores)
-						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score+" 🌟")
 					}
 				}
 				

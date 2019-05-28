@@ -127,6 +127,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				if(player.getName()!="") {
 					msg.put("event","UPDATE GLOBAL SCORE");
 					msg.put("globalScore", getGlobalScore());
+					msg.put("myGlobalScore", player.getGlobalScore());
 					player.addMessage(new TextMessage(msg.toString()));
 				}
 				break;
