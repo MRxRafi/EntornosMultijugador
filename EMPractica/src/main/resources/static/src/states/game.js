@@ -116,8 +116,8 @@ Spacewar.gameState.prototype = {
 			numJug=game.global.myRoom.numJugadores
 		}
 
-		for(i=0;i<numJug;i++){
-			scoreText[i]=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+y,(i+1)+"º:",styleScores)
+		for(i=0;i<this.MAX_NUM_SCORE;i++){
+			scoreText[i]=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+y,"",styleScores)
 			
 			console.log("aa: "+scoreText[i])
 			scoreText[i].anchor.setTo(1,0)
@@ -151,10 +151,19 @@ Spacewar.gameState.prototype = {
 						
 			console.log(game.global.myRoom.scores)
 			if(game.global.myRoom.scores){
-				for(i=0;i<numJug;i++){
-					if(game.global.myRoom.scores)
-					scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+				if(game.global.myRoom.scores.length>this.MAX_NUM_SCORE){
+					for(i=0;i<this.MAX_NUM_SCORE;i++){
+						if(game.global.myRoom.scores)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+					}
 				}
+				else{
+					for(i=0;i<game.global.myRoom.scores.length;i++){
+						if(game.global.myRoom.scores)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+					}
+				}
+				
 			}
 
 			let msg = new Object()
