@@ -24,6 +24,7 @@ public class Player extends Spaceship {
 	private int bullets;
 	private int lifePoints;
 	private int score;
+	private int globalScore;
 	private BlockingQueue<TextMessage> messages = new ArrayBlockingQueue<TextMessage>(10);
 	private Future<?> task;
 	
@@ -36,6 +37,7 @@ public class Player extends Spaceship {
 		this.bullets=100;
 		this.lifePoints = 10;
 		this.score = 0;
+		this.globalScore=0;
 	}
 
 	// METHODS
@@ -45,6 +47,14 @@ public class Player extends Spaceship {
 	
 	public void setBullets(int b) {
 		this.bullets=b;
+	}
+	
+	public int getGlobalScore() {
+		return this.globalScore;
+	}
+	
+	public void setGlobalScore(int s) {
+		this.globalScore=s;
 	}
 	
 	public int getPlayerId() {
@@ -90,6 +100,7 @@ public class Player extends Spaceship {
 	public int getScore() {
 		return score;
 	}
+	
 
 	public void setScore(int score) {
 		this.score = score;

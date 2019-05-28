@@ -1,5 +1,5 @@
 Spacewar.menuState = function(game) {
-
+	this.MAX_NUM_SCORE=10
 }
 
 Spacewar.menuState.prototype = {
@@ -34,7 +34,6 @@ Spacewar.menuState.prototype = {
 			inputName.submitButton.onclick = function() {
 				if (inputName.input.value !== "") {
 					setPlayerName(inputName.input.value); // objects/functions.js
-					console.log(game.global.myPlayer.name)
 				
 				} else {
 					alert("El nombre de usuario está vacío")
@@ -54,6 +53,12 @@ Spacewar.menuState.prototype = {
 			font : "60px Chakra Petch",
 			boundsAlignH : "center"
 		};
+
+		styleScores = {
+			fill : "rgb(255,255,255)",
+			font : "25px Chakra Petch",
+			boundsAlignH : "left",
+		}
 		// Se pide un nombre de usuario y se envía al servidor
 
 		// Crea el texto del Título
@@ -94,10 +99,14 @@ Spacewar.menuState.prototype = {
 		}
 	},
 
-	update : function(){
+	update : function(){	
 		if(game.global.myPlayer.name){
 			inputName.hide();
 		}
+		if(game.global.myPlayer.name!=""){
+			updateGlobalScores()
+		}
+
 	},
 	
 	play : function() {
