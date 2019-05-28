@@ -4,7 +4,7 @@ public class WaitRoom extends GenericRoom {
 	
 	private int IdHost;
 	private boolean empezar;
-	private final int MAX_PLAYERS = 4;
+	private final int MAX_PLAYERS = 30;
 	
 	public WaitRoom(String nombre) {
 		this.nombre = nombre;
