@@ -124,7 +124,7 @@ Spacewar.menuState.prototype = {
 	closeSession : function() {
 		if (typeof game.global.myPlayer.id !== 'undefined'
 				&& typeof game.global.myPlayer.name !== 'undefined') {
-			game.global.myPlayer.name = undefined;
+			game.global.myPlayer.name = "";
 			var inputName = new inputText("rgb(0,130,130)", "white",
 					"Introduzca su nombre de usuario:", "Aceptar", 15);
 

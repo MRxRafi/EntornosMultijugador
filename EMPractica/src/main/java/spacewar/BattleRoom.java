@@ -44,6 +44,7 @@ public class BattleRoom extends GenericRoom {
 		this.Jugadores = players;
 		for(Player p : players.values()) {
 			scores.add(p);
+			p.setPosition(Math.random()*worldBounds, Math.random()*worldBounds);
 		}
 	}
 	

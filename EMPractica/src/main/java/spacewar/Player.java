@@ -163,3 +163,20 @@ class PlayerComparer implements Comparator <Player> {
 	  }
 
 }
+
+class PlayerComparer2 implements Comparator <Player> {
+	@Override
+	  public int compare(Player p1, Player p2) {
+	    // TODO: Handle null x or y values
+	    int startComparison = compare(p1.getGlobalScore(),p2.getGlobalScore());
+	    return startComparison;
+	  }
+
+	  // I don't know why this isn't in Long...
+	  private static int compare(int a, int b) {
+	    return a < b ? 1
+	         : a > b ? -1
+	         : 0;
+	  }
+
+}

@@ -21,8 +21,8 @@ window.onload = function() {
 	game.global.myInterface.otherPlayers = []
 	
 	// WEBSOCKET CONFIGURATOR
-	game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
-	//game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
+	//game.global.socket = new WebSocket("ws://" + window.location.host +"/spacewar")
+	game.global.socket = new WebSocket("ws://25.61.250.43:8080/spacewar")
 	
 	game.global.socket.onopen = () => {
 		if (game.global.DEBUG_MODE) {
@@ -311,6 +311,14 @@ window.onload = function() {
 				game.world.setBounds(0, 0, 1024, 600);
 				game.camera.position.x = 0
 				game.camera.position.y = 0
+				
+				//Disable keys
+				game.input.keyboard.removeKeyCapture(Phaser.Keyboard.W);
+				game.input.keyboard.removeKeyCapture(Phaser.Keyboard.A);
+				game.input.keyboard.removeKeyCapture(Phaser.Keyboard.S);
+				game.input.keyboard.removeKeyCapture(Phaser.Keyboard.D);
+				game.input.keyboard.removeKeyCapture(Phaser.Keyboard.SPACE);
+				
 				game.state.start("scoreState"); 
 			} else {
 				game.global.otherPlayers[msg.id].image.destroy()

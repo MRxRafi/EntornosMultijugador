@@ -120,7 +120,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.setGlobalScore(player.getGlobalScore()+node.path("score").asInt());
 				System.out.println("2:"+player.getGlobalScore());
 				synchronized (game) {
-					Collections.sort(globalScores, new PlayerComparer());
+					Collections.sort(globalScores, new PlayerComparer2());
 				}
 				break;
 			case "UPDATE GLOBAL SCORE":
