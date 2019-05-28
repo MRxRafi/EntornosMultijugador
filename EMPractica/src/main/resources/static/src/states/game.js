@@ -4,6 +4,11 @@ Spacewar.gameState = function(game) {
 		font : "60px Chakra Petch",
 		boundsAlignH : "left",
 	}
+	styleScores = {
+		fill : "rgb(255,255,255)",
+		font : "25px Chakra Petch",
+		boundsAlignH : "left",
+	}
 	this.worldBounds = 3000
 	this.MAX_BULLETS=10
 	this.MAX_FUEL=50
@@ -13,6 +18,7 @@ Spacewar.gameState = function(game) {
 	this.recharge
 	this.numStars = 100 // Should be canvas size dependant
 	this.maxProjectiles = 800 // 8 per player
+	this.MAX_NUM_SCORE=10
 	game.global.myPlayer.healthBar
 }
 
@@ -70,7 +76,7 @@ Spacewar.gameState.prototype = {
 	},
 
 	create : function() {
-		game.global.myRoom.scores=[];
+		pass=false;
 		game.global.myPlayer.numBullets=this.MAX_BULLETS
 		this.fuel=this.MAX_FUEL
 		this.bulletTime = 0
@@ -99,6 +105,26 @@ Spacewar.gameState.prototype = {
 		fuelText.anchor.setTo(1,1);
 		fuelText.fixedToCamera = true;
 
+		scoreText=[];
+		var y=0;
+		var offSet=30
+		numJug=this.MAX_NUM_SCORE
+
+		console.log(game.global.myRoom.scores)
+		if(this.MAX_NUM_SCORE>game.global.myRoom.numJugadores){
+			console.log(game.global.myRoom.numJugadores)
+			numJug=game.global.myRoom.numJugadores
+		}
+
+		for(i=0;i<this.MAX_NUM_SCORE;i++){
+			scoreText[i]=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+y,"",styleScores)
+			
+			console.log("aa: "+scoreText[i])
+			scoreText[i].anchor.setTo(1,0)
+			scoreText[i].fixedToCamera=true
+			y+=offSet
+		}
+
 		this.wKey = game.input.keyboard.addKey(Phaser.Keyboard.W);
 		this.sKey = game.input.keyboard.addKey(Phaser.Keyboard.S);
 		this.aKey = game.input.keyboard.addKey(Phaser.Keyboard.A);
@@ -122,6 +148,23 @@ Spacewar.gameState.prototype = {
 			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 
 			fuelText.setText("⛽ "+this.fuel+"/"+this.MAX_FUEL)
+						
+			console.log(game.global.myRoom.scores)
+			if(game.global.myRoom.scores){
+				if(game.global.myRoom.scores.length>this.MAX_NUM_SCORE){
+					for(i=0;i<this.MAX_NUM_SCORE;i++){
+						if(game.global.myRoom.scores)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+					}
+				}
+				else{
+					for(i=0;i<game.global.myRoom.scores.length;i++){
+						if(game.global.myRoom.scores)
+						scoreText[i].setText((i+1)+"º "+ game.global.myRoom.scores[i].name+": "+game.global.myRoom.scores[i].score)
+					}
+				}
+				
+			}
 
 			let msg = new Object()
 			msg.event = 'UPDATE MOVEMENT'

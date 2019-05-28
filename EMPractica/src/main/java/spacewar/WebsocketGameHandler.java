@@ -183,8 +183,8 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				}
 				
 				msg.put("event","UPDATE SCORE");
-				System.out.println(game.battleRooms.get(player.getActualRoom()).getScore().toString());
-				msg.put("scores",game.battleRooms.get(player.getActualRoom()).getScore().toString());
+				//System.out.println(game.battleRooms.get(player.getActualRoom()).getScore().toString());
+				msg.put("scores",game.battleRooms.get(player.getActualRoom()).getScore());
 				player.addMessage(new TextMessage(msg.toString()));
 				//System.out.println(game.battleRooms.get(player.getActualRoom()).getScore().toString());
 				
