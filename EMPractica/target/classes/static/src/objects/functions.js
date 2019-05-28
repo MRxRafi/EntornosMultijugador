@@ -31,6 +31,13 @@ function updateActivePlayers(){
 	game.global.socket.send(JSON.stringify(message))
 }
 
+function updateGlobalScores(){
+	let message = {
+		event: "UPDATE GLOBAL SCORE"
+	}
+	game.global.socket.send(JSON.stringify(message))
+}
+
 function updateNumPlayers(){
 	let message = {
 			event : 'UPDATE NUMJUG',

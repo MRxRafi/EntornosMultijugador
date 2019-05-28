@@ -15,6 +15,11 @@ Spacewar.scoreState.prototype = {
 	},
 
 	create : function() {
+		let message = {
+			event: "SEND SCORE",
+			score: game.global.myPlayer.score
+		}
+		game.global.socket.send(JSON.stringify(message))
 		// Estilos de texto
 		var titleStyle = {
 			fill : "rgb(255,255,255)",

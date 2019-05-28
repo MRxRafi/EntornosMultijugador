@@ -15,6 +15,7 @@ window.onload = function() {
 		validRoom: false,
 		projectiles : [],
 		idHost:-1,
+		globalScores: []
 	}
 
 	game.global.myInterface.otherPlayers = []
@@ -41,17 +42,26 @@ window.onload = function() {
 		var msg = JSON.parse(message.data)
 		
 		switch (msg.event) {
+		case "UPDATE GLOBAL SCORE":
+				if (game.global.DEBUG_MODE) {
+					console.log('[DEBUG] UPDATE GLOBAL SCORE message recieved')
+					console.dir(msg)
+				}
+				var lista=JSON.parse(msg.globalScore)
+				game.global.globalScores=lista
+				console.log(game.global.globalScores)
 		case "ADD NAME":
 			if (game.global.DEBUG_MODE) {
 				console.log('[DEBUG] ADD NAME message recieved')
 				console.dir(msg)
 			}
-
 			if(msg.isAdded){
 				game.global.myPlayer.name=msg.playerName;
 			}
 			else{
-				alert("Nombre escogido no valido")
+				if(!game.global.myPlayer.name){
+					alert("Nombre escogido no valido")
+				}
 			}
 
 			break;
@@ -195,6 +205,7 @@ window.onload = function() {
 						game.global.myPlayer.image.angle = player.facingAngle  
 						game.global.myPlayer.healthBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height - 5)
 						game.global.myPlayer.healthBar.setPercent(player.lifePoints * 10)
+						game.global.myPlayer.fuelBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height)
 						game.global.myPlayer.score = player.score;
 						game.global.myInterface.myPlayerName.x = player.posX - game.global.myInterface.myPlayerName.width/2;
 						game.global.myInterface.myPlayerName.y = player.posY + game.global.myPlayer.image.height + 5;

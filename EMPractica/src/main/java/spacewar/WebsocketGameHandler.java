@@ -36,12 +36,14 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	private AtomicInteger playerId = new AtomicInteger(0);
 	private AtomicInteger projectileId = new AtomicInteger(0);
 	private ExecutorService messageManager = Executors.newCachedThreadPool();
+	private CopyOnWriteArrayList<Player> globalScores = new CopyOnWriteArrayList<Player>();
 	
 	// METHODS
 	/* When someone connects to the server, this method is executed */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //¿A que sala hay que añadirlo?
 		Player player = new Player(playerId.incrementAndGet(), session);
+		globalScores.add(player);			
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
 		player.setTask(messageManager.submit(()->player.manageMessages()));
 
@@ -54,6 +56,21 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 		player.addMessage(new TextMessage(msg.toString()));
 		
 		game.lobby.addJugador(player);
+	}
+	
+	public String getGlobalScore(){
+		int aux=0;
+		String s="[{";
+		for(Player p : globalScores) {
+			if(aux>0)
+				s+=",{";
+			s+=p.toString();
+			s+="}";
+			aux++;
+			
+		}
+		s+="]";
+		return s;
 	}
 	
 	public String getWaitRooms() {
@@ -82,7 +99,10 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 			switch (node.get("event").asText()) {
 			case "PLAYER NAME":
 				msg.put("event","ADD NAME");
+				System.out.println("a");
+				System.out.println(node.get("playerName").asText());
 				msg.put("playerName", node.get("playerName").asText());
+				System.out.println(allNames.contains(node.get("playerName").asText()));
 				synchronized (game) {
 					if(allNames.contains(node.get("playerName").asText())) {
 						msg.put("isAdded", false);
@@ -94,6 +114,21 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 					}					
 				}
 				player.addMessage(new TextMessage(msg.toString()));
+				break;
+			case "SEND SCORE":
+				System.out.println("1:"+player.getGlobalScore());
+				player.setGlobalScore(player.getGlobalScore()+node.path("score").asInt());
+				System.out.println("2:"+player.getGlobalScore());
+				synchronized (game) {
+					Collections.sort(globalScores, new PlayerComparer());
+				}
+				break;
+			case "UPDATE GLOBAL SCORE":
+				if(player.getName()!="") {
+					msg.put("event","UPDATE GLOBAL SCORE");
+					msg.put("globalScore", getGlobalScore());
+					player.addMessage(new TextMessage(msg.toString()));
+				}
 				break;
 				
 			case "JOIN":

@@ -1,5 +1,6 @@
 Spacewar.lobbyState = function(game) {
 	var inputChat
+	this.MAX_NUM_SCORE=10
 }
 
 Spacewar.lobbyState.prototype = {
@@ -67,10 +68,48 @@ Spacewar.lobbyState.prototype = {
 
 			y += yOffset;
 		}
+
+		scoreText=[];
+	    y=0;
+		yOffset = 30;
+
+		console.log(game.global.myRoom.scores)
+		if(this.MAX_NUM_SCORE>game.global.myRoom.numJugadores){
+			console.log(game.global.myRoom.numJugadores)
+			numJug=game.global.myRoom.numJugadores
+		}
+
+		for(i=0;i<this.MAX_NUM_SCORE;i++){
+			scoreText[i]=game.add.text(game.canvas.width-10,y,"",styleScores)
+			
+			console.log("aa: "+scoreText[i])
+			scoreText[i].anchor.setTo(1,0)
+			scoreText[i].fixedToCamera=true
+			y+=yOffset
+		}
 	},
 	
 	update : function(){
 		updateActivePlayers();
+		updateGlobalScores()
+		if(game.global.globalScores){
+			if(game.global.globalScores.length>this.MAX_NUM_SCORE){
+				for(i=0;i<this.MAX_NUM_SCORE;i++){
+					if(game.global.globalScores[i]){
+						console.log(game.global.globalScores[i])
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
+					}
+				}
+			}
+			else{
+				for(i=0;i<game.global.globalScores.length;i++){
+					if(game.global.globalScores[i]){
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
+					}						
+				}
+			}
+			
+		}
 	},
 	
 	crear : function() {		

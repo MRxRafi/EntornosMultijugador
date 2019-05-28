@@ -70,7 +70,12 @@ Spacewar.gameState.prototype = {
                      bg: {color: 'red'}, bar: {color: 'green'}, animationDuration: 10 };
         game.global.myPlayer.healthBar = new HealthBar(game, barConfig);
         ////// FIN BARRA DE VIDA //////
-        
+        ////// BARRA DE COMBUSTIBLE //////
+        barConfig2 = {width: 50, height: 5, x: game.global.myPlayer.image.x, y: game.global.myPlayer.image.y - game.global.myPlayer.image.height,
+                bg: {color: 'grey'}, bar: {color: 'white'}, animationDuration: 10 };
+        game.global.myPlayer.fuelBar = new HealthBar(game, barConfig2);
+        ////// FIN BARRA DE COMBUSTIBLE //////
+		
         game.global.otherPlayers = new Array()
         game.global.myInterface.otherPlayers = new Array()
 	},
@@ -97,11 +102,12 @@ Spacewar.gameState.prototype = {
 				game.global.myPlayer.numBullets++			
 			}
 		}
+		game.global.myPlayer.fuelBar.setPercent(this.fuel * 2)
 
 		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
 		bulletsText.anchor.setTo(0,1);
 		bulletsText.fixedToCamera = true;
-		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,"⛽ "+this.fuel+"/"+this.MAX_FUEL,style)
+		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,game.global.myPlayer.score + " pts",style)
 		fuelText.anchor.setTo(1,1);
 		fuelText.fixedToCamera = true;
 
@@ -147,8 +153,10 @@ Spacewar.gameState.prototype = {
 
 			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 
-			fuelText.setText("⛽ "+this.fuel+"/"+this.MAX_FUEL)
-						
+			fuelText.setText(game.global.myPlayer.score + " pts");
+			
+			game.global.myPlayer.fuelBar.setPercent(this.fuel * 2)
+			
 			console.log(game.global.myRoom.scores)
 			if(game.global.myRoom.scores){
 				if(game.global.myRoom.scores.length>this.MAX_NUM_SCORE){
