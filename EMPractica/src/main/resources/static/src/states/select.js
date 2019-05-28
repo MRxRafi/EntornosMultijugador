@@ -76,6 +76,14 @@ Spacewar.selectRoomState.prototype = {
 			y+= yOffset;
 			
 		}
+		// Botón de volver
+		returnText = game.add.text(8,0,"Volver", style);
+		returnText.boundsAlignH = "left";
+		returnText.setTextBounds(0,0,game.world.width,game.world.height);
+		returnText.inputEnabled = true;
+		returnText.events.onInputOver.add(mouseOver,this);
+		returnText.events.onInputOut.add(mouseOut,this);
+		returnText.events.onInputDown.add(this.volver, this);
 		//game.world.setBounds(0, 0, game.width, yOffset*game.global.gameList.length+20);
 		console.log(gameText)
 	},
@@ -129,5 +137,9 @@ Spacewar.selectRoomState.prototype = {
 			}
 			game.global.socket.send(JSON.stringify(message))
 		}
+	},
+	
+	volver : function() {
+		game.state.start('lobbyState');
 	}
 }
