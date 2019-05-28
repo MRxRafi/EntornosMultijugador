@@ -78,11 +78,12 @@ window.onload = function() {
 			break;
 		case 'UPDATE SCORE':
 			if (game.global.DEBUG_MODE) {
-				console.log('[DEBUG] UPDATE SCORE PLAYERS message recieved');
-				console.dir(msg);
+				//console.log('[DEBUG] UPDATE SCORE PLAYERS message recieved');
+				//console.dir(msg);
 			}
-
-			game.global.myRoom.scores=msg.scores
+			var lista=JSON.parse(msg.scores)
+			console.log(lista)
+			game.global.myRoom.scores=lista
 			break;
 		case 'UPDATE ACTIVE PLAYERS':
 			if (game.global.DEBUG_MODE) {
@@ -187,7 +188,7 @@ window.onload = function() {
 			
 			if (typeof game.global.myPlayer.image !== 'undefined') {
 				for (var player of msg.players) {
-					console.log(player.name +"  "+player.score)
+					//console.log(player.name +"  "+player.score)
 					if (game.global.myPlayer.id == player.id) {
 						game.global.myPlayer.image.x = player.posX
 						game.global.myPlayer.image.y = player.posY

@@ -40,7 +40,7 @@ Spacewar.lobbyState.prototype = {
 		
 		lobbyOptions = [ "Crear Partida", "Buscar Partida", "Volver" ];
 
-		lobbyOptions = [ "Crear Partida", "Buscar Partida" ];
+		lobbyOptions = [ "Crear Partida", "Buscar Partida", "Volver" ];
 		var y = game.canvas.height / 3;
 		var yOffset = 80;
 		var lobbyText = [];

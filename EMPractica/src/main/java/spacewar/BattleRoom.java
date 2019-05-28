@@ -47,8 +47,19 @@ public class BattleRoom extends GenericRoom {
 		}
 	}
 	
-	public Collection<Player> getScore(){
-		return scores;
+	public String getScore(){
+		int aux=0;
+		String s="[{";
+		for(Player p : scores) {
+			if(aux>0)
+				s+=",{";
+			s+=p.toString();
+			s+="}";
+			aux++;
+			
+		}
+		s+="]";
+		return s;
 	}
 	
 	public BattleRoom(String nombre, Player player, ScheduledExecutorService scheduler) {

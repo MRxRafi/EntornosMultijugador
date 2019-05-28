@@ -124,6 +124,10 @@ public class Player extends Spaceship {
 		}
 	}
 	
+	public String toString() {
+		return "\"name\": \"" + getName() + "\", \"score\": \""+getScore()+"\"";
+	}
+	
 	private String getRandomShipType() {
 		String[] randomShips = { "blue", "darkgrey", "green", "metalic", "orange", "purple", "red" };
 		String ship = (randomShips[new Random().nextInt(randomShips.length)]);
