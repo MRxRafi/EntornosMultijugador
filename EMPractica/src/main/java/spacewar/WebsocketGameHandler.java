@@ -43,11 +43,7 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception { //¿A que sala hay que añadirlo?
 		Player player = new Player(playerId.incrementAndGet(), session);
-		globalScores.add(player);
-		synchronized (game) {
-			Collections.sort(globalScores,new PlayerComparer());
-			
-		}
+		globalScores.add(player);			
 		session.getAttributes().put(PLAYER_ATTRIBUTE, player);
 		player.setTask(messageManager.submit(()->player.manageMessages()));
 
