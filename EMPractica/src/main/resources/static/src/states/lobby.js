@@ -97,14 +97,14 @@ Spacewar.lobbyState.prototype = {
 				for(i=0;i<this.MAX_NUM_SCORE;i++){
 					if(game.global.globalScores[i]){
 						console.log(game.global.globalScores[i])
-						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].score)
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
 					}
 				}
 			}
 			else{
 				for(i=0;i<game.global.globalScores.length;i++){
 					if(game.global.globalScores[i]){
-						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].score)
+						scoreText[i].setText((i+1)+"º "+ game.global.globalScores[i].name+": "+game.global.globalScores[i].globalScore)
 					}						
 				}
 			}

@@ -136,7 +136,7 @@ public class Player extends Spaceship {
 	}
 	
 	public String toString() {
-		return "\"name\": \"" + getName() + "\", \"score\": \""+getScore()+"\"";
+		return "\"name\": \"" + getName() + "\", \"score\": \""+getScore()+"\", \"globalScore\": \""+getGlobalScore()+"\"";
 	}
 	
 	private String getRandomShipType() {

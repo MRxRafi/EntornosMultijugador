@@ -116,10 +116,13 @@ public class WebsocketGameHandler extends TextWebSocketHandler {
 				player.addMessage(new TextMessage(msg.toString()));
 				break;
 			case "SEND SCORE":
+				System.out.println("1:"+player.getGlobalScore());
 				player.setGlobalScore(player.getGlobalScore()+node.path("score").asInt());
+				System.out.println("2:"+player.getGlobalScore());
 				synchronized (game) {
 					Collections.sort(globalScores, new PlayerComparer());
 				}
+				break;
 			case "UPDATE GLOBAL SCORE":
 				if(player.getName()!="") {
 					msg.put("event","UPDATE GLOBAL SCORE");

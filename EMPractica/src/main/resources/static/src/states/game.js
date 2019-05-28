@@ -107,7 +107,7 @@ Spacewar.gameState.prototype = {
 		bulletsText=game.add.text(game.camera.x+10,game.camera.y+game.canvas.height,"🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS,style)
 		bulletsText.anchor.setTo(0,1);
 		bulletsText.fixedToCamera = true;
-		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,"⛽ "+this.fuel+"/"+this.MAX_FUEL,style)
+		fuelText=game.add.text(game.camera.x+game.canvas.width-10,game.camera.y+game.canvas.height,game.global.myPlayer.score + " pts",style)
 		fuelText.anchor.setTo(1,1);
 		fuelText.fixedToCamera = true;
 
@@ -153,7 +153,7 @@ Spacewar.gameState.prototype = {
 
 			bulletsText.setText("🔥 "+game.global.myPlayer.numBullets+"/"+this.MAX_BULLETS)
 
-			fuelText.setText("⛽ "+this.fuel+"/"+this.MAX_FUEL)
+			fuelText.setText(game.global.myPlayer.score + " pts");
 			
 			game.global.myPlayer.fuelBar.setPercent(this.fuel * 2)
 			

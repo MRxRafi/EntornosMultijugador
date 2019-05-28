@@ -205,6 +205,7 @@ window.onload = function() {
 						game.global.myPlayer.image.angle = player.facingAngle  
 						game.global.myPlayer.healthBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height - 5)
 						game.global.myPlayer.healthBar.setPercent(player.lifePoints * 10)
+						game.global.myPlayer.fuelBar.setPosition(player.posX, player.posY - game.global.myPlayer.image.height)
 						game.global.myPlayer.score = player.score;
 						game.global.myInterface.myPlayerName.x = player.posX - game.global.myInterface.myPlayerName.width/2;
 						game.global.myInterface.myPlayerName.y = player.posY + game.global.myPlayer.image.height + 5;
